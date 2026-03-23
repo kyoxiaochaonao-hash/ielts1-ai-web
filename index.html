@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI IELTS Speaking Practice</title>
+    <style>
+        :root{
+            --bg: #f6f8fc;
+            --card: #ffffff;
+            --text: #0f172a;
+            --muted: #64748b;
+            --border: #e6eaf2;
+            --blue: #2563eb;
+            --blue-600: #1d4ed8;
+            --blue-50: #eff6ff;
+            --shadow: 0 12px 40px rgba(2, 6, 23, 0.06);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+            background: var(--bg);
+            color: var(--text);
+            margin: 0;
+        }
+
+        .hidden { display: none !important; }
+        .fade-in { animation: fadeIn 0.35s ease-out forwards; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .app {
+            min-height: 100vh;
+            padding: 24px 16px 40px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .shell {
+            width: 100%;
+            max-width: 1120px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 14px 16px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 240px;
+        }
+
+        .brand-badge {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--blue), #60a5fa);
+            display: grid;
+            place-items: center;
+            color: white;
+            flex: 0 0 auto;
+        }
+
+        .brand-title {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            line-height: 1.1;
+        }
+
+        .brand-title strong { font-size: 18px; letter-spacing: -0.01em; }
+        .brand-title span { font-size: 12px; color: var(--muted); }
+
+        .topbar-controls {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+            gap: 10px;
+            flex: 1 1 auto;
+        }
+
+        .field {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: #fff;
+            min-width: 280px;
+        }
+
+        .field input {
+            border: 0;
+            outline: none;
+            width: 100%;
+            font-size: 13px;
+            color: var(--text);
+            background: transparent;
+        }
+
+        .meta {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--muted);
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 10px;
+            border-radius: 999px;
+            background: var(--blue-50);
+            color: var(--blue-600);
+            border: 1px solid rgba(37, 99, 235, 0.15);
+            font-weight: 800;
+            font-size: 11px;
+            letter-spacing: 0.06em;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        @media (min-width: 960px) {
+            .layout {
+                grid-template-columns: 1.2fr 0.8fr;
+                align-items: start;
+            }
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .card-hd {
+            padding: 16px 18px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .card-hd h2 {
+            margin: 0;
+            font-size: 12px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        .card-bd { padding: 18px; }
+
+        .actions-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .btn {
+            appearance: none;
+            border: 1px solid var(--border);
+            background: #fff;
+            color: var(--text);
+            border-radius: 12px;
+            padding: 10px 12px;
+            font-weight: 800;
+            font-size: 13px;
+            cursor: pointer;
+            transition: transform .06s ease, background .15s ease, border-color .15s ease, box-shadow .15s ease;
+        }
+
+        .btn:hover { border-color: rgba(37, 99, 235, 0.3); }
+        .btn:active { transform: translateY(1px); }
+        .btn:disabled { opacity: .55; cursor: not-allowed; }
+        .btn:focus-visible { outline: 3px solid rgba(37,99,235,.25); outline-offset: 2px; }
+
+        .btn-primary {
+            background: var(--blue);
+            border-color: rgba(37, 99, 235, 0.45);
+            color: white;
+            box-shadow: 0 10px 24px rgba(37, 99, 235, 0.22);
+        }
+
+        .btn-primary:hover { background: var(--blue-600); }
+
+        .btn-ghost {
+            background: #f1f5f9;
+            color: #334155;
+            border-color: #e2e8f0;
+            box-shadow: 0 6px 18px rgba(2, 6, 23, 0.04);
+        }
+        .btn-ghost:hover { background: #eaf0f8; }
+
+        .btn-icon {
+            width: 44px;
+            height: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            border-radius: 14px;
+        }
+
+        .speak {
+            width: 140px;
+            height: 56px;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 14px;
+            letter-spacing: .02em;
+        }
+
+        .speak svg { width: 18px; height: 18px; }
+
+        .pulse-recording { animation: pulse 1.5s infinite; }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.35); }
+            70% { transform: scale(1.03); box-shadow: 0 0 0 12px rgba(37, 99, 235, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
+        }
+
+        .subtle {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .question {
+            font-size: 22px;
+            line-height: 1.32;
+            font-weight: 900;
+            margin: 0;
+            color: var(--text);
+        }
+        @media (min-width: 960px) {
+            .question { font-size: 24px; }
+        }
+
+        .question-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+        }
+
+        .prep {
+            padding: 12px 14px;
+            background: var(--blue-50);
+            border: 1px solid rgba(37, 99, 235, 0.16);
+            border-radius: 14px;
+            color: #1e3a8a;
+        }
+
+        .prep strong { color: var(--blue-600); }
+
+        .parts {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .part-card {
+            cursor: pointer;
+            transition: border-color .15s ease, background .15s ease, transform .06s ease;
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            text-align: left;
+        }
+
+        .part-card:active { transform: translateY(1px); }
+        .part-card strong { font-size: 14px; }
+        .part-card span { font-size: 11px; color: var(--muted); }
+
+        .part-card.active {
+            border-color: rgba(37, 99, 235, 0.45);
+            background: var(--blue-50);
+        }
+
+        .muted { opacity: .6; }
+
+        .transcript {
+            min-height: 120px;
+            border-radius: 14px;
+            background: #fbfcff;
+            border: 1px solid var(--border);
+            padding: 12px 14px;
+            white-space: pre-line;
+            color: #0f172a;
+        }
+
+        .score-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        @media (min-width: 960px) {
+            .score-grid {
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+            }
+        }
+
+        .score {
+            padding: 12px 12px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background: #fff;
+            text-align: left;
+        }
+
+        .score label {
+            display: block;
+            font-size: 11px;
+            font-weight: 900;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: .06em;
+        }
+
+        .score strong {
+            display: block;
+            font-size: 24px;
+            margin-top: 8px;
+            color: var(--blue-600);
+        }
+
+        .bar {
+            margin-top: 10px;
+            height: 8px;
+            border-radius: 999px;
+            background: #e8eef9;
+            overflow: hidden;
+        }
+
+        .bar > div {
+            height: 100%;
+            width: 0%;
+            border-radius: 999px;
+            background: linear-gradient(90deg, var(--blue), #60a5fa);
+            transition: width 520ms ease;
+        }
+
+        .section-title {
+            font-size: 11px;
+            font-weight: 900;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin: 0 0 10px;
+        }
+
+        .text-block {
+            white-space: pre-line;
+            color: #0f172a;
+            line-height: 1.6;
+            font-size: 13px;
+        }
+
+        .divider { height: 1px; background: var(--border); margin: 14px 0; }
+
+        .slider {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .slider input[type="range"] { width: 200px; accent-color: var(--blue); }
+
+        .spinner {
+            width: 32px;
+            height: 32px;
+            border-radius: 999px;
+            border: 4px solid rgba(37,99,235,.18);
+            border-top-color: var(--blue);
+            animation: spin 0.9s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <div class="shell">
+            <header class="topbar">
+                <div class="brand">
+                    <div class="brand-badge" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+                            <path d="M4 7l8-4 8 4"></path>
+                            <path d="M4 7v10l8 4 8-4V7"></path>
+                            <path d="M12 3v18"></path>
+                        </svg>
+                    </div>
+                    <div class="brand-title">
+                        <strong>IELTS Speaking Coach</strong>
+                        <span>Practice / Exam • AI feedback</span>
+                    </div>
+                </div>
+
+                <div class="topbar-controls">
+                    <div class="field" title="Keys are stored locally in your browser">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16" style="color:var(--muted)">
+                            <rect x="3" y="11" width="18" height="11" rx="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                        <input type="password" id="api-key-input" placeholder="DeepSeek API Key..." autocomplete="off">
+                    </div>
+                    <button id="start-btn" class="btn btn-primary">Start</button>
+                    <div class="meta">
+                        <span>Mode: <span id="mode-label" style="color:var(--blue-600); font-weight:900;">Practice</span></span>
+                        <span id="exam-progress" class="hidden"></span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="layout">
+                <div style="display:flex; flex-direction:column; gap:16px;">
+                    <section class="card" aria-label="Question">
+                        <div class="card-hd">
+                            <h2>Question</h2>
+                            <div class="actions-row">
+                                <span id="part-label" class="chip">PART 1</span>
+                                <button type="button" class="btn btn-icon btn-ghost" onclick="generateNewQuestion()" title="New question" aria-label="New question">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+                                        <path d="M21 12a9 9 0 1 1-3-6.7"></path>
+                                        <path d="M21 3v7h-7"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-bd">
+                            <div class="question-meta">
+                                <div class="chip" style="padding:8px 12px;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
+                                        <path d="M12 20h9"></path>
+                                        <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"></path>
+                                    </svg>
+                                    <span id="part-progress">Loading...</span>
+                                </div>
+                            </div>
+                            <h2 id="current-question" class="question">Loading IELTS question...</h2>
+
+                            <div class="divider"></div>
+
+                            <div id="prep-box" class="hidden prep">
+                                You have <strong><span id="prep-seconds">30</span>s</strong> to prepare. Recording will unlock automatically.
+                            </div>
+
+                            <div class="actions-row" style="margin-top:14px; justify-content:space-between;">
+                                <div class="actions-row">
+                                    <button id="record-btn" class="btn btn-primary speak">
+                                        <span id="mic-icon" aria-hidden="true">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3Z"></path>
+                                                <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                                                <path d="M12 19v4"></path>
+                                                <path d="M8 23h8"></path>
+                                            </svg>
+                                        </span>
+                                        <span id="stop-icon" class="hidden" aria-hidden="true">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <rect x="7" y="7" width="10" height="10" rx="2"></rect>
+                                            </svg>
+                                        </span>
+                                        <span>Speak</span>
+                                    </button>
+                                    <div class="subtle" id="status-text">Tap to start answering</div>
+                                </div>
+                                <div class="slider" aria-label="Controls">
+                                    <button id="mode-practice" class="btn btn-primary">Practice</button>
+                                    <button id="mode-exam" class="btn btn-ghost">Exam</button>
+                                    <span class="subtle" style="font-weight:900;">Part 2 Prep</span>
+                                    <input id="prep-slider" type="range" min="0" max="180" step="5" value="30">
+                                    <span id="prep-value" class="chip" style="padding:6px 10px; letter-spacing:0;">30s</span>
+                                </div>
+                            </div>
+
+                            <div style="margin-top:14px;">
+                                <div id="part-section" class="parts">
+                                    <div onclick="setPart('part1')" id="btn-part1" class="part-card active">
+                                        <strong>Part 1</strong>
+                                        <span>Personal questions</span>
+                                    </div>
+                                    <div onclick="setPart('part2')" id="btn-part2" class="part-card">
+                                        <strong>Part 2</strong>
+                                        <span>Cue card talk</span>
+                                    </div>
+                                    <div onclick="setPart('part3')" id="btn-part3" class="part-card">
+                                        <strong>Part 3</strong>
+                                        <span>Deep discussion</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="card" aria-label="Transcript">
+                        <div class="card-hd">
+                            <h2>Transcript</h2>
+                            <span class="subtle">Speech-to-text</span>
+                        </div>
+                        <div class="card-bd">
+                            <div id="transcript-container" class="hidden">
+                                <div id="transcript-text" class="transcript"></div>
+                            </div>
+                            <div id="transcript-empty" class="subtle">Your transcript will appear here after you start speaking.</div>
+                        </div>
+                    </section>
+                </div>
+
+                <div style="display:flex; flex-direction:column; gap:16px;">
+                    <div id="loading-analysis" class="hidden card">
+                        <div class="card-bd" style="display:flex; align-items:center; gap:12px;">
+                            <div class="spinner" aria-hidden="true"></div>
+                            <div>
+                                <div style="font-weight:900; color:var(--blue-600);">Grading your response…</div>
+                                <div class="subtle">Quick feedback first, detailed feedback next.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <section id="results-area" class="hidden fade-in card" aria-label="Scores and feedback">
+                        <div class="card-hd">
+                            <h2>Scores</h2>
+                            <span class="subtle">IELTS-style</span>
+                        </div>
+                        <div class="card-bd" style="display:flex; flex-direction:column; gap:14px;">
+                            <div id="quick-feedback-card" class="hidden" style="border:1px solid var(--border); border-radius:14px; padding:12px 14px; background:#fff;">
+                                <div class="section-title" style="margin-bottom:6px;">Quick feedback</div>
+                                <div id="quick-feedback-text" class="text-block"></div>
+                                <div id="quick-feedback-status" class="subtle" style="margin-top:8px;"></div>
+                            </div>
+
+                            <div class="score-grid" aria-label="Main scores">
+                                <div class="score">
+                                    <label>Overall</label>
+                                    <strong id="res-overall">0.0</strong>
+                                    <div class="bar"><div id="bar-overall"></div></div>
+                                </div>
+                                <div class="score">
+                                    <label>Grammar</label>
+                                    <strong id="res-grammar">0.0</strong>
+                                    <div class="bar"><div id="bar-grammar"></div></div>
+                                </div>
+                                <div class="score">
+                                    <label>Vocabulary</label>
+                                    <strong id="res-vocab">0.0</strong>
+                                    <div class="bar"><div id="bar-vocab"></div></div>
+                                </div>
+                                <div class="score">
+                                    <label>Fluency</label>
+                                    <strong id="res-fluency">0.0</strong>
+                                    <div class="bar"><div id="bar-fluency"></div></div>
+                                </div>
+                            </div>
+
+                            <div class="divider"></div>
+
+                            <div>
+                                <div class="section-title">Examiner feedback (EN)</div>
+                                <div id="feedback-en" class="text-block"></div>
+                                <div style="height:10px"></div>
+                                <div class="section-title">考官反馈 (中文)</div>
+                                <div id="feedback-zh" class="text-block"></div>
+                            </div>
+
+                            <div class="divider"></div>
+
+                            <div>
+                                <div class="section-title">How to improve (EN)</div>
+                                <div id="suggestions-en" class="text-block"></div>
+                                <div style="height:10px"></div>
+                                <div class="section-title">提升建议 (中文)</div>
+                                <div id="suggestions-zh" class="text-block"></div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="pronunciation-details" class="hidden card" aria-label="Pronunciation analysis">
+                        <div class="card-hd">
+                            <h2>Pronunciation</h2>
+                            <span class="chip" style="letter-spacing:0;">Beta</span>
+                        </div>
+                        <div class="card-bd" style="display:flex; flex-direction:column; gap:12px;">
+                            <div class="score-grid">
+                                <div class="score">
+                                    <label>Accuracy</label>
+                                    <strong id="res-accuracy">0</strong>
+                                    <div class="bar"><div id="bar-accuracy"></div></div>
+                                </div>
+                                <div class="score">
+                                    <label>Fluency</label>
+                                    <strong id="res-fluency-p">0</strong>
+                                    <div class="bar"><div id="bar-fluency-p"></div></div>
+                                </div>
+                                <div class="score">
+                                    <label>Completeness</label>
+                                    <strong id="res-completeness">0</strong>
+                                    <div class="bar"><div id="bar-completeness"></div></div>
+                                </div>
+                                <div class="score">
+                                    <label>Score</label>
+                                    <strong id="res-pron-score">0</strong>
+                                    <div class="bar"><div id="bar-pron"></div></div>
+                                </div>
+                            </div>
+                            <div class="transcript" style="font-size:13px;" id="pron-feedback-text"></div>
+                            <div class="subtle">AI-simulated pronunciation score. A professional SOE API can be connected later.</div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentPart = 'part1';
+        let currentMode = 'practice';
+        let isRecording = false;
+        let recognition = null;
+        let finalTranscript = '';
+        let historyQuestions = [];
+
+        const apiKeyInput = document.getElementById('api-key-input');
+        const startBtn = document.getElementById('start-btn');
+        const questionText = document.getElementById('current-question');
+        const recordBtn = document.getElementById('record-btn');
+        const statusText = document.getElementById('status-text');
+        const transcriptContainer = document.getElementById('transcript-container');
+        const transcriptText = document.getElementById('transcript-text');
+        const transcriptEmpty = document.getElementById('transcript-empty');
+        const resultsArea = document.getElementById('results-area');
+        const loadingAnalysis = document.getElementById('loading-analysis');
+        const modePracticeBtn = document.getElementById('mode-practice');
+        const modeExamBtn = document.getElementById('mode-exam');
+        const modeLabel = document.getElementById('mode-label');
+        const examProgress = document.getElementById('exam-progress');
+        const partSection = document.getElementById('part-section');
+        const quickFeedbackCard = document.getElementById('quick-feedback-card');
+        const quickFeedbackText = document.getElementById('quick-feedback-text');
+        const quickFeedbackStatus = document.getElementById('quick-feedback-status');
+        const partProgress = document.getElementById('part-progress');
+        const prepBox = document.getElementById('prep-box');
+        const prepSecondsEl = document.getElementById('prep-seconds');
+        let prepTimer = null;
+        const prepSlider = document.getElementById('prep-slider');
+        const prepValue = document.getElementById('prep-value');
+        let prepSecondsSetting = 30;
+
+        function sanitizeQuestionForHistory(q) {
+            if (!q) return '';
+            let s = String(q);
+            s = s.replace(/[\r\n]+/g, ' ');
+            s = s.replace(/["'‘’“”]/g, '');
+            s = s.replace(/^\s*(\d+\.\s*|\d+\)\s*|Q\d+\s*[:\-]\s*)/i, '');
+            s = s.replace(/\s+/g, ' ').trim();
+            return s;
+        }
+
+        function rememberHistory(q) {
+            const s = sanitizeQuestionForHistory(q);
+            if (!s) return;
+            const key = s.toLowerCase();
+            if (historyQuestions.some(x => sanitizeQuestionForHistory(x).toLowerCase() === key)) return;
+            historyQuestions.push(s);
+            if (historyQuestions.length > 30) historyQuestions = historyQuestions.slice(-30);
+        }
+
+        function init() {
+            if (window.lucide && typeof window.lucide.createIcons === 'function') {
+                window.lucide.createIcons();
+            }
+            
+            apiKeyInput.value = localStorage.getItem('deepseek_api_key') || '';
+            const savedPrep = localStorage.getItem('part2_prep_seconds');
+            if (savedPrep !== null && savedPrep !== undefined && savedPrep !== '') {
+                const n = parseInt(savedPrep, 10);
+                if (!Number.isNaN(n)) prepSecondsSetting = Math.max(0, Math.min(180, n));
+            }
+            prepSlider.value = String(prepSecondsSetting);
+            prepValue.textContent = `${prepSecondsSetting}s`;
+            prepSlider.addEventListener('input', () => {
+                prepSecondsSetting = parseInt(prepSlider.value, 10);
+                prepValue.textContent = `${prepSecondsSetting}s`;
+            });
+            prepSlider.addEventListener('change', () => {
+                localStorage.setItem('part2_prep_seconds', String(prepSecondsSetting));
+                if (apiKeyInput.value.trim()) {
+                    setMode(currentMode);
+                }
+            });
+            apiKeyInput.addEventListener('change', () => {
+                localStorage.setItem('deepseek_api_key', apiKeyInput.value);
+                if (apiKeyInput.value.trim()) {
+                    setMode(currentMode);
+                }
+            });
+
+            setupSpeechRecognition();
+
+            modePracticeBtn.addEventListener('click', () => setMode('practice'));
+            modeExamBtn.addEventListener('click', () => setMode('exam'));
+            if (startBtn) startBtn.addEventListener('click', () => setMode(currentMode));
+
+            if (apiKeyInput.value.trim()) {
+                setMode('practice');
+            } else {
+                questionText.textContent = "Paste your DeepSeek API key to start.";
+                updateModeUI();
+            }
+        }
+
+        function updateModeUI(total = 0, index = 0) {
+            modeLabel.textContent = currentMode === 'exam' ? 'Exam' : 'Practice';
+            if (currentMode === 'practice') {
+                modePracticeBtn.classList.add('btn-primary');
+                modePracticeBtn.classList.remove('btn-ghost');
+                modeExamBtn.classList.add('btn-ghost');
+                modeExamBtn.classList.remove('btn-primary');
+            } else {
+                modeExamBtn.classList.add('btn-primary');
+                modeExamBtn.classList.remove('btn-ghost');
+                modePracticeBtn.classList.add('btn-ghost');
+                modePracticeBtn.classList.remove('btn-primary');
+            }
+
+            if (currentMode === 'exam') {
+                examProgress.classList.remove('hidden');
+                examProgress.textContent = total ? `Q${index + 1}/${total}` : '';
+                partSection.classList.add('muted');
+            } else {
+                examProgress.classList.add('hidden');
+                examProgress.textContent = '';
+                partSection.classList.remove('muted');
+            }
+        }
+
+        async function parseJsonOrThrow(res) {
+            const contentType = (res.headers.get('content-type') || '').toLowerCase();
+            const text = await res.text();
+            if (!contentType.includes('application/json')) {
+                const snippet = text.slice(0, 200).replace(/\s+/g, ' ');
+                throw new Error(`Server did not return JSON (status ${res.status}). ${snippet}`);
+            }
+            try {
+                return JSON.parse(text);
+            } catch (e) {
+                const snippet = text.slice(0, 200).replace(/\s+/g, ' ');
+                throw new Error(`Invalid JSON (status ${res.status}). ${snippet}`);
+            }
+        }
+
+        async function setMode(mode) {
+            const apiKey = apiKeyInput.value.trim();
+            if (!apiKey) {
+                alert("Please enter your DeepSeek API key first.");
+                return;
+            }
+
+            try {
+                const res = await fetch('/set_mode', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        mode,
+                        part: currentPart,
+                        prep_seconds: prepSecondsSetting,
+                        history_questions: historyQuestions.slice(-20),
+                        api_key: apiKey
+                    })
+                });
+                const data = await parseJsonOrThrow(res);
+                if (data.error) throw new Error(data.error);
+
+                currentMode = data.mode;
+                if (data.part) currentPart = data.part;
+                highlightPart(currentPart);
+                questionText.textContent = data.question || "Ready.";
+                partProgress.textContent = data.progress_label || "";
+                setupPrep(data.step_type, data.prep_seconds || 0);
+                if (data.question_index === 0) {
+                    historyQuestions = [];
+                }
+                rememberHistory(data.question);
+
+                if (currentMode === 'exam') {
+                    updateModeUI(data.total_questions || 0, data.question_index || 0);
+                } else {
+                    updateModeUI();
+                }
+
+                resultsArea.classList.add('hidden');
+                transcriptText.textContent = '';
+                transcriptContainer.classList.add('hidden');
+                if (transcriptEmpty) transcriptEmpty.classList.remove('hidden');
+                statusText.textContent = "Tap to start answering";
+                recordBtn.disabled = false;
+            } catch (err) {
+                alert("Failed to set mode: " + err.message);
+            }
+        }
+
+        function highlightPart(part) {
+            document.querySelectorAll('.part-card').forEach(c => c.classList.remove('active'));
+            const btn = document.getElementById(`btn-${part}`);
+            if (btn) btn.classList.add('active');
+            document.getElementById('part-label').textContent = part.toUpperCase().replace(/^PART(\d)$/, 'PART $1');
+        }
+
+        function setupPrep(stepType, seconds) {
+            if (prepTimer) {
+                clearInterval(prepTimer);
+                prepTimer = null;
+            }
+            if (stepType === 'cue_card' && seconds > 0) {
+                prepBox.classList.remove('hidden');
+                recordBtn.disabled = true;
+                let remaining = seconds;
+                prepSecondsEl.textContent = remaining;
+                statusText.textContent = "Prepare first...";
+                prepTimer = setInterval(() => {
+                    remaining -= 1;
+                    prepSecondsEl.textContent = Math.max(0, remaining);
+                    if (remaining <= 0) {
+                        clearInterval(prepTimer);
+                        prepTimer = null;
+                        prepBox.classList.add('hidden');
+                        recordBtn.disabled = false;
+                        statusText.textContent = "Tap to start answering";
+                    }
+                }, 1000);
+            } else {
+                prepBox.classList.add('hidden');
+                recordBtn.disabled = false;
+            }
+        }
+
+        function setupSpeechRecognition() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) {
+                alert("Web Speech API not supported. Please use Chrome.");
+                return;
+            }
+            
+            recognition = new SpeechRecognition();
+            recognition.continuous = true;
+            recognition.interimResults = true;
+            recognition.lang = 'en-US';
+
+            recognition.onstart = () => {
+                isRecording = true;
+                recordBtn.classList.add('pulse-recording');
+                document.getElementById('mic-icon').classList.add('hidden');
+                document.getElementById('stop-icon').classList.remove('hidden');
+                statusText.textContent = "Listening...";
+                transcriptContainer.classList.remove('hidden');
+                if (transcriptEmpty) transcriptEmpty.classList.add('hidden');
+                resultsArea.classList.add('hidden');
+                finalTranscript = '';
+                transcriptText.textContent = '';
+            };
+
+            recognition.onresult = (event) => {
+                let interim = '';
+                for (let i = event.resultIndex; i < event.results.length; ++i) {
+                    if (event.results[i].isFinal) finalTranscript += event.results[i][0].transcript;
+                    else interim += event.results[i][0].transcript;
+                }
+                transcriptText.textContent = finalTranscript + interim;
+                if (transcriptEmpty) transcriptEmpty.classList.add('hidden');
+            };
+
+            recognition.onend = () => { if (isRecording) recognition.start(); };
+        }
+
+        recordBtn.addEventListener('click', () => {
+            if (isRecording) {
+                stopRecording();
+            } else {
+                startRecording();
+            }
+        });
+
+        function startRecording() {
+            if (!recognition) return;
+            recognition.start();
+        }
+
+        function stopRecording() {
+            isRecording = false;
+            if (recognition) recognition.stop();
+            
+            recordBtn.classList.remove('pulse-recording');
+            document.getElementById('mic-icon').classList.remove('hidden');
+            document.getElementById('stop-icon').classList.add('hidden');
+            statusText.textContent = "Analyzing...";
+
+            analyzeAnswer();
+        }
+
+        async function analyzeAnswer() {
+            if (!finalTranscript.trim()) {
+                statusText.textContent = "Tap to start answering";
+                return;
+            }
+            
+            loadingAnalysis.classList.remove('hidden');
+            resultsArea.classList.add('hidden');
+
+            try {
+                const res = await fetch('/submit_answer', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        transcript: finalTranscript,
+                        question: questionText.textContent,
+                        part: currentPart,
+                        history_questions: historyQuestions.slice(-20),
+                        api_key: apiKeyInput.value
+                    })
+                });
+                const data = await parseJsonOrThrow(res);
+                if (data.error && !data.result && !data.feedback_en && !data.feedback) throw new Error(data.error);
+
+                if (data.mode === 'practice') {
+                    if (data.phase === 'light' && data.job_id) {
+                        resultsArea.classList.remove('hidden');
+                        quickFeedbackCard.classList.remove('hidden');
+                        quickFeedbackText.textContent = data.light_feedback || "Good start—add one reason or example.";
+                        quickFeedbackStatus.textContent = "Generating detailed feedback...";
+                        if (data.next_question) {
+                            currentPart = data.next_part || currentPart;
+                            highlightPart(currentPart);
+                            questionText.textContent = data.next_question;
+                            partProgress.textContent = data.next_progress_label || "";
+                            setupPrep(data.next_step_type, data.next_prep_seconds || 0);
+                            updateModeUI(data.total_questions || 0, (data.question_index || 1) - 1);
+                            rememberHistory(data.next_question);
+                        }
+                        await pollHeavyResult(data.job_id);
+                    } else {
+                        displayResults(data.result || data);
+                    }
+                } else if (data.mode === 'exam') {
+                    if (data.done) {
+                        if (data.phase === 'light' && data.job_id) {
+                            resultsArea.classList.remove('hidden');
+                            quickFeedbackCard.classList.remove('hidden');
+                            quickFeedbackText.textContent = data.light_feedback || "Exam finished—generating final score.";
+                            quickFeedbackStatus.textContent = "Generating final detailed score...";
+                            questionText.textContent = "Exam finished.";
+                            recordBtn.disabled = true;
+                            await pollHeavyResult(data.job_id);
+                        } else {
+                            displayResults(data.result || data);
+                            questionText.textContent = "Exam finished.";
+                            recordBtn.disabled = true;
+                        }
+                    } else {
+                        resultsArea.classList.add('hidden');
+                        transcriptText.textContent = '';
+                        transcriptContainer.classList.add('hidden');
+                        if (transcriptEmpty) transcriptEmpty.classList.remove('hidden');
+                        currentPart = data.next_part || currentPart;
+                        highlightPart(currentPart);
+                        questionText.textContent = data.next_question || questionText.textContent;
+                        partProgress.textContent = data.next_progress_label || "";
+                        setupPrep(data.next_step_type, data.next_prep_seconds || 0);
+                        updateModeUI(data.total_questions || 0, data.question_index || 0);
+                        statusText.textContent = `Saved ${data.question_index}/${data.total_questions}. Tap to answer next.`;
+                        rememberHistory(data.next_question);
+                    }
+                } else {
+                    displayResults(data.result || data);
+                }
+            } catch (err) {
+                alert("Analysis failed: " + err.message);
+            } finally {
+                loadingAnalysis.classList.add('hidden');
+                statusText.textContent = "Tap to start answering";
+            }
+        }
+
+        async function pollHeavyResult(jobId) {
+            const maxAttempts = 25;
+            const intervalMs = 1200;
+            for (let i = 0; i < maxAttempts; i++) {
+                try {
+                    const res = await fetch(`/get_result?job_id=${encodeURIComponent(jobId)}`);
+                    const data = await parseJsonOrThrow(res);
+                    if (data.status === 'done' && data.result) {
+                        const meta = data.result && data.result._meta ? data.result._meta : null;
+                        const tag = meta && meta.prompt_version ? ` (${meta.prompt_version})` : '';
+                        const warn = data.result && data.result.warning ? " (fallback used)" : "";
+                        quickFeedbackStatus.textContent = `Detailed feedback ready${tag}${warn}.`;
+                        displayResults(data.result);
+                        return;
+                    }
+                    if (data.status === 'error') {
+                        quickFeedbackStatus.textContent = "Detailed feedback failed; showing quick feedback only.";
+                        return;
+                    }
+                } catch (e) {
+                    quickFeedbackStatus.textContent = "Waiting for detailed feedback...";
+                }
+                await new Promise(r => setTimeout(r, intervalMs));
+            }
+            quickFeedbackStatus.textContent = "Detailed feedback is taking longer than expected. You can continue to the next question.";
+        }
+
+        function displayResults(data) {
+            resultsArea.classList.remove('hidden');
+            quickFeedbackCard.classList.add('hidden');
+            if (data && data.warning) {
+                quickFeedbackCard.classList.remove('hidden');
+                quickFeedbackText.textContent = "Note: model output used fallback due to an error.";
+                quickFeedbackStatus.textContent = String(data.warning).slice(0, 160);
+            }
+            const clampNum = (v, lo, hi) => {
+                const n = Number(v);
+                if (!Number.isFinite(n)) return null;
+                return Math.max(lo, Math.min(hi, n));
+            };
+            const setBar = (barId, value, max) => {
+                const el = document.getElementById(barId);
+                if (!el) return;
+                const n = clampNum(value, 0, max);
+                const pct = n === null ? 0 : (n / max) * 100;
+                el.style.width = `${pct}%`;
+            };
+            const setBand = (valId, barId, value) => {
+                const n = clampNum(value, 0, 9);
+                document.getElementById(valId).textContent = (n === null) ? "N/A" : n.toFixed(1);
+                setBar(barId, n, 9);
+            };
+            const setPct = (valId, barId, value) => {
+                const n = clampNum(value, 0, 100);
+                document.getElementById(valId).textContent = (n === null) ? "N/A" : String(Math.round(n));
+                setBar(barId, n, 100);
+            };
+
+            setBand('res-overall', 'bar-overall', data.overall_band);
+            setBand('res-grammar', 'bar-grammar', data.grammar_score);
+            setBand('res-vocab', 'bar-vocab', data.vocabulary_score);
+            setBand('res-fluency', 'bar-fluency', data.fluency_score);
+            document.getElementById('feedback-en').textContent = data.feedback_en || data.feedback || "No feedback.";
+            document.getElementById('feedback-zh').textContent = data.feedback_zh || "";
+            document.getElementById('suggestions-en').textContent = data.suggestions_en || data.suggestions || "No suggestions.";
+            document.getElementById('suggestions-zh').textContent = data.suggestions_zh || "";
+            
+            const pronDetails = document.getElementById('pronunciation-details');
+            if (data.pronunciation) {
+                pronDetails.classList.remove('hidden');
+                setPct('res-accuracy', 'bar-accuracy', data.pronunciation.accuracy);
+                setPct('res-fluency-p', 'bar-fluency-p', data.pronunciation.fluency);
+                setPct('res-completeness', 'bar-completeness', data.pronunciation.completeness);
+                setPct('res-pron-score', 'bar-pron', data.pronunciation.pronunciation_score);
+                const pfEn = data.pronunciation.pronunciation_feedback_en || data.pronunciation.pronunciation_feedback || "";
+                const pfZh = data.pronunciation.pronunciation_feedback_zh || "";
+                document.getElementById('pron-feedback-text').textContent = (pfEn && pfZh) ? `${pfEn}\n${pfZh}` : (pfEn || pfZh);
+            } else {
+                pronDetails.classList.add('hidden');
+                setPct('res-accuracy', 'bar-accuracy', null);
+                setPct('res-fluency-p', 'bar-fluency-p', null);
+                setPct('res-completeness', 'bar-completeness', null);
+                setPct('res-pron-score', 'bar-pron', null);
+            }
+            window.scrollTo({ top: resultsArea.offsetTop - 50, behavior: 'smooth' });
+        }
+
+        async function generateNewQuestion() {
+            if (currentMode === 'exam') return;
+            const apiKey = apiKeyInput.value.trim();
+            if (!apiKey) {
+                alert("Please enter your DeepSeek API key first.");
+                return;
+            }
+            await setMode('practice');
+        }
+
+        function setPart(part) {
+            if (currentMode === 'exam') return;
+            currentPart = part;
+            highlightPart(part);
+            setMode('practice');
+        }
+
+        init();
+    </script>
+</body>
+</html>

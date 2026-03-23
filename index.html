@@ -4,657 +4,1562 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI IELTS Speaking Practice</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        :root{
-            --bg: #f6f8fc;
+        :root {
+            --bg: #f8fafc;
+            --bg-secondary: #f1f5f9;
             --card: #ffffff;
             --text: #0f172a;
+            --text-secondary: #475569;
             --muted: #64748b;
-            --border: #e6eaf2;
+            --border: #e2e8f0;
+            --border-hover: #cbd5e1;
             --blue: #2563eb;
             --blue-600: #1d4ed8;
+            --blue-700: #1e40af;
             --blue-50: #eff6ff;
-            --shadow: 0 12px 40px rgba(2, 6, 23, 0.06);
+            --blue-100: #dbeafe;
+            --green: #10b981;
+            --green-50: #ecfdf5;
+            --amber: #f59e0b;
+            --amber-50: #fffbeb;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            --radius: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
         }
 
-        * { box-sizing: border-box; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
         body {
-            font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+            font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
             background: var(--bg);
             color: var(--text);
-            margin: 0;
+            line-height: 1.5;
+            min-height: 100vh;
         }
 
         .hidden { display: none !important; }
-        .fade-in { animation: fadeIn 0.35s ease-out forwards; }
+
+        .fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .app {
-            min-height: 100vh;
-            padding: 24px 16px 40px;
-            display: flex;
-            justify-content: center;
+        /* ========== Navigation ========== */
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
         }
 
-        .shell {
-            width: 100%;
-            max-width: 1120px;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .topbar {
+        .navbar-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+            height: 64px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 12px;
-            padding: 14px 16px;
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            box-shadow: var(--shadow);
+            gap: 24px;
         }
 
-        .brand {
+        .nav-brand {
             display: flex;
             align-items: center;
-            gap: 10px;
-            min-width: 240px;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--text);
         }
 
-        .brand-badge {
+        .nav-brand-icon {
             width: 40px;
             height: 40px;
-            border-radius: 12px;
-            background: linear-gradient(135deg, var(--blue), #60a5fa);
-            display: grid;
-            place-items: center;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--blue) 0%, var(--blue-600) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             color: white;
-            flex: 0 0 auto;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
         }
 
-        .brand-title {
+        .nav-brand-text {
             display: flex;
             flex-direction: column;
-            gap: 2px;
-            line-height: 1.1;
+            gap: 1px;
         }
 
-        .brand-title strong { font-size: 18px; letter-spacing: -0.01em; }
-        .brand-title span { font-size: 12px; color: var(--muted); }
+        .nav-brand-title {
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
 
-        .topbar-controls {
+        .nav-brand-subtitle {
+            font-size: 11px;
+            color: var(--muted);
+            font-weight: 500;
+        }
+
+        .nav-links {
             display: flex;
             align-items: center;
-            justify-content: flex-end;
-            flex-wrap: wrap;
-            gap: 10px;
-            flex: 1 1 auto;
+            gap: 4px;
         }
 
-        .field {
+        .nav-link {
             display: flex;
             align-items: center;
-            gap: 8px;
-            padding: 10px 12px;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            background: #fff;
-            min-width: 280px;
-        }
-
-        .field input {
-            border: 0;
-            outline: none;
-            width: 100%;
-            font-size: 13px;
-            color: var(--text);
+            gap: 6px;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            border: none;
             background: transparent;
         }
 
-        .meta {
+        .nav-link:hover {
+            background: var(--bg-secondary);
+            color: var(--text);
+        }
+
+        .nav-link.active {
+            background: var(--blue-50);
+            color: var(--blue);
+        }
+
+        .nav-link svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .nav-actions {
             display: flex;
             align-items: center;
-            gap: 10px;
-            color: var(--muted);
-            font-size: 12px;
-            white-space: nowrap;
+            gap: 12px;
         }
 
-        .chip {
-            display: inline-flex;
+        .api-key-field {
+            display: flex;
             align-items: center;
             gap: 8px;
-            padding: 8px 10px;
-            border-radius: 999px;
-            background: var(--blue-50);
-            color: var(--blue-600);
-            border: 1px solid rgba(37, 99, 235, 0.15);
-            font-weight: 800;
-            font-size: 11px;
-            letter-spacing: 0.06em;
+            padding: 8px 14px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            transition: all 0.15s ease;
         }
 
-        .layout {
+        .api-key-field:focus-within {
+            border-color: var(--blue);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .api-key-field svg {
+            width: 16px;
+            height: 16px;
+            color: var(--muted);
+        }
+
+        .api-key-field input {
+            border: none;
+            outline: none;
+            background: transparent;
+            font-size: 13px;
+            width: 200px;
+            color: var(--text);
+        }
+
+        .api-key-field input::placeholder {
+            color: var(--muted);
+        }
+
+        /* ========== Main Layout ========== */
+        .app-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        .main-layout {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 16px;
+            gap: 24px;
         }
 
-        @media (min-width: 960px) {
-            .layout {
-                grid-template-columns: 1.2fr 0.8fr;
+        @media (min-width: 1024px) {
+            .main-layout {
+                grid-template-columns: 1.1fr 0.9fr;
                 align-items: start;
             }
         }
 
+        .left-column, .right-column {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* ========== Cards ========== */
         .card {
             background: var(--card);
             border: 1px solid var(--border);
-            border-radius: 20px;
+            border-radius: var(--radius-xl);
             box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: box-shadow 0.2s ease, border-color 0.2s ease;
         }
 
-        .card-hd {
-            padding: 16px 18px;
+        .card:hover {
+            box-shadow: var(--shadow-lg);
+        }
+
+        .card-header {
+            padding: 16px 20px;
             border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
             justify-content: space-between;
+            gap: 12px;
+            background: linear-gradient(to bottom, rgba(248, 250, 252, 0.5), transparent);
+        }
+
+        .card-header-left {
+            display: flex;
+            align-items: center;
             gap: 10px;
         }
 
-        .card-hd h2 {
-            margin: 0;
-            font-size: 12px;
+        .card-header-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: var(--blue-50);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--blue);
+        }
+
+        .card-header-icon svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .card-title {
+            font-size: 11px;
+            font-weight: 700;
             letter-spacing: 0.08em;
             text-transform: uppercase;
             color: var(--muted);
         }
 
-        .card-bd { padding: 18px; }
+        .card-body {
+            padding: 20px;
+        }
 
-        .actions-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
+        /* ========== Badges / Chips ========== */
+        .badge {
+            display: inline-flex;
             align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.04em;
         }
 
+        .badge-blue {
+            background: var(--blue-50);
+            color: var(--blue-600);
+            border: 1px solid rgba(37, 99, 235, 0.15);
+        }
+
+        .badge-green {
+            background: var(--green-50);
+            color: var(--green);
+            border: 1px solid rgba(16, 185, 129, 0.15);
+        }
+
+        .badge-amber {
+            background: var(--amber-50);
+            color: var(--amber);
+            border: 1px solid rgba(245, 158, 11, 0.15);
+        }
+
+        /* ========== Buttons ========== */
         .btn {
-            appearance: none;
-            border: 1px solid var(--border);
-            background: #fff;
-            color: var(--text);
-            border-radius: 12px;
-            padding: 10px 12px;
-            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 16px;
+            border-radius: 10px;
             font-size: 13px;
+            font-weight: 600;
             cursor: pointer;
-            transition: transform .06s ease, background .15s ease, border-color .15s ease, box-shadow .15s ease;
+            transition: all 0.15s ease;
+            border: 1px solid var(--border);
+            background: white;
+            color: var(--text);
         }
 
-        .btn:hover { border-color: rgba(37, 99, 235, 0.3); }
-        .btn:active { transform: translateY(1px); }
-        .btn:disabled { opacity: .55; cursor: not-allowed; }
-        .btn:focus-visible { outline: 3px solid rgba(37,99,235,.25); outline-offset: 2px; }
+        .btn:hover:not(:disabled) {
+            border-color: var(--border-hover);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn:active:not(:disabled) {
+            transform: translateY(1px);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn:focus-visible {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+        }
 
         .btn-primary {
             background: var(--blue);
-            border-color: rgba(37, 99, 235, 0.45);
+            border-color: var(--blue);
             color: white;
-            box-shadow: 0 10px 24px rgba(37, 99, 235, 0.22);
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
         }
 
-        .btn-primary:hover { background: var(--blue-600); }
+        .btn-primary:hover:not(:disabled) {
+            background: var(--blue-600);
+            border-color: var(--blue-600);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35);
+        }
 
         .btn-ghost {
-            background: #f1f5f9;
-            color: #334155;
-            border-color: #e2e8f0;
-            box-shadow: 0 6px 18px rgba(2, 6, 23, 0.04);
+            background: var(--bg-secondary);
+            border-color: transparent;
+            color: var(--text-secondary);
         }
-        .btn-ghost:hover { background: #eaf0f8; }
+
+        .btn-ghost:hover:not(:disabled) {
+            background: var(--border);
+            border-color: transparent;
+        }
 
         .btn-icon {
-            width: 44px;
-            height: 44px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
+            width: 40px;
+            height: 40px;
             padding: 0;
-            border-radius: 14px;
         }
 
-        .speak {
-            width: 140px;
-            height: 56px;
+        .btn-icon svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .btn-lg {
+            padding: 14px 24px;
+            font-size: 15px;
             border-radius: 999px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            font-size: 14px;
-            letter-spacing: .02em;
         }
 
-        .speak svg { width: 18px; height: 18px; }
+        /* Recording button */
+        .btn-record {
+            width: 160px;
+            height: 52px;
+            border-radius: 999px;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+        }
 
-        .pulse-recording { animation: pulse 1.5s infinite; }
+        .btn-record svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .pulse-recording {
+            animation: pulse 1.5s ease-in-out infinite;
+        }
 
         @keyframes pulse {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.35); }
-            70% { transform: scale(1.03); box-shadow: 0 0 0 12px rgba(37, 99, 235, 0); }
-            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
+            0%, 100% { 
+                transform: scale(1); 
+                box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
+            }
+            50% { 
+                transform: scale(1.02); 
+                box-shadow: 0 0 0 8px rgba(37, 99, 235, 0.1), 0 4px 14px rgba(37, 99, 235, 0.35);
+            }
         }
 
-        .subtle {
+        /* ========== Mode Toggle ========== */
+        .mode-toggle {
+            display: flex;
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            padding: 4px;
+        }
+
+        .mode-toggle .btn {
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
             color: var(--muted);
-            font-size: 12px;
+            box-shadow: none;
         }
 
-        .question {
-            font-size: 22px;
-            line-height: 1.32;
-            font-weight: 900;
-            margin: 0;
+        .mode-toggle .btn.active {
+            background: white;
             color: var(--text);
+            box-shadow: var(--shadow-sm);
         }
-        @media (min-width: 960px) {
-            .question { font-size: 24px; }
+
+        /* ========== Part Selection ========== */
+        .parts-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .part-card {
+            padding: 14px 16px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background: white;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: left;
+        }
+
+        .part-card:hover {
+            border-color: var(--border-hover);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .part-card.active {
+            border-color: var(--blue);
+            background: var(--blue-50);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .part-card strong {
+            display: block;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 2px;
+        }
+
+        .part-card span {
+            font-size: 11px;
+            color: var(--muted);
+        }
+
+        .part-card.active strong {
+            color: var(--blue-700);
+        }
+
+        .part-card.active span {
+            color: var(--blue-600);
+        }
+
+        /* ========== Question Display ========== */
+        .question-display {
+            font-size: 22px;
+            font-weight: 800;
+            line-height: 1.35;
+            color: var(--text);
+            letter-spacing: -0.01em;
+        }
+
+        @media (min-width: 768px) {
+            .question-display {
+                font-size: 26px;
+            }
         }
 
         .question-meta {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            gap: 10px;
+            gap: 12px;
             flex-wrap: wrap;
-            margin-bottom: 10px;
+            margin-bottom: 14px;
         }
 
-        .prep {
-            padding: 12px 14px;
-            background: var(--blue-50);
-            border: 1px solid rgba(37, 99, 235, 0.16);
-            border-radius: 14px;
-            color: #1e3a8a;
-        }
-
-        .prep strong { color: var(--blue-600); }
-
-        .parts {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 10px;
-        }
-
-        .part-card {
-            cursor: pointer;
-            transition: border-color .15s ease, background .15s ease, transform .06s ease;
-            padding: 10px 12px;
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            background: #fff;
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-            text-align: left;
-        }
-
-        .part-card:active { transform: translateY(1px); }
-        .part-card strong { font-size: 14px; }
-        .part-card span { font-size: 11px; color: var(--muted); }
-
-        .part-card.active {
-            border-color: rgba(37, 99, 235, 0.45);
-            background: var(--blue-50);
-        }
-
-        .muted { opacity: .6; }
-
-        .transcript {
-            min-height: 120px;
-            border-radius: 14px;
-            background: #fbfcff;
-            border: 1px solid var(--border);
-            padding: 12px 14px;
-            white-space: pre-line;
-            color: #0f172a;
-        }
-
-        .score-grid {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 10px;
-        }
-
-        @media (min-width: 960px) {
-            .score-grid {
-                grid-template-columns: repeat(4, minmax(0, 1fr));
-            }
-        }
-
-        .score {
-            padding: 12px 12px;
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            background: #fff;
-            text-align: left;
-        }
-
-        .score label {
-            display: block;
-            font-size: 11px;
-            font-weight: 900;
-            color: var(--muted);
-            text-transform: uppercase;
-            letter-spacing: .06em;
-        }
-
-        .score strong {
-            display: block;
-            font-size: 24px;
-            margin-top: 8px;
-            color: var(--blue-600);
-        }
-
-        .bar {
-            margin-top: 10px;
-            height: 8px;
-            border-radius: 999px;
-            background: #e8eef9;
-            overflow: hidden;
-        }
-
-        .bar > div {
-            height: 100%;
-            width: 0%;
-            border-radius: 999px;
-            background: linear-gradient(90deg, var(--blue), #60a5fa);
-            transition: width 520ms ease;
-        }
-
-        .section-title {
-            font-size: 11px;
-            font-weight: 900;
-            letter-spacing: .08em;
-            text-transform: uppercase;
-            color: var(--muted);
-            margin: 0 0 10px;
-        }
-
-        .text-block {
-            white-space: pre-line;
-            color: #0f172a;
-            line-height: 1.6;
-            font-size: 13px;
-        }
-
-        .divider { height: 1px; background: var(--border); margin: 14px 0; }
-
-        .slider {
+        /* ========== Prep Timer ========== */
+        .prep-box {
+            padding: 14px 18px;
+            background: linear-gradient(135deg, var(--blue-50) 0%, white 100%);
+            border: 1px solid rgba(37, 99, 235, 0.2);
+            border-radius: var(--radius);
+            color: var(--blue-700);
             display: flex;
             align-items: center;
             gap: 10px;
+        }
+
+        .prep-box svg {
+            width: 20px;
+            height: 20px;
+            color: var(--blue);
+        }
+
+        .prep-box strong {
+            color: var(--blue);
+            font-weight: 800;
+        }
+
+        /* ========== Controls Row ========== */
+        .controls-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
             flex-wrap: wrap;
         }
 
-        .slider input[type="range"] { width: 200px; accent-color: var(--blue); }
-
-        .spinner {
-            width: 32px;
-            height: 32px;
-            border-radius: 999px;
-            border: 4px solid rgba(37,99,235,.18);
-            border-top-color: var(--blue);
-            animation: spin 0.9s linear infinite;
+        .controls-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
         }
 
-        @keyframes spin { to { transform: rotate(360deg); } }
+        .controls-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .status-text {
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        /* ========== Slider ========== */
+        .slider-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .slider-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        input[type="range"] {
+            width: 140px;
+            height: 6px;
+            border-radius: 999px;
+            background: var(--border);
+            appearance: none;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--blue);
+            border: 2px solid white;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+        }
+
+        /* ========== Transcript ========== */
+        .transcript-box {
+            min-height: 100px;
+            padding: 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text);
+        }
+
+        .empty-state {
+            color: var(--muted);
+            font-size: 13px;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* ========== Scores Grid ========== */
+        .scores-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        @media (min-width: 640px) {
+            .scores-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .score-card {
+            padding: 16px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            transition: all 0.2s ease;
+        }
+
+        .score-card:hover {
+            border-color: var(--border-hover);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .score-label {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 8px;
+        }
+
+        .score-value {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--blue-600);
+            line-height: 1;
+        }
+
+        .score-bar {
+            margin-top: 10px;
+            height: 6px;
+            border-radius: 999px;
+            background: var(--bg-secondary);
+            overflow: hidden;
+        }
+
+        .score-bar-fill {
+            height: 100%;
+            border-radius: 999px;
+            background: linear-gradient(90deg, var(--blue) 0%, #60a5fa 100%);
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+
+        /* ========== Feedback Sections ========== */
+        .feedback-section {
+            padding: 16px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius);
+            margin-top: 12px;
+        }
+
+        .feedback-section:first-of-type {
+            margin-top: 0;
+        }
+
+        .section-title {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 10px;
+        }
+
+        .feedback-text {
+            font-size: 14px;
+            line-height: 1.65;
+            color: var(--text);
+            white-space: pre-wrap;
+        }
+
+        .divider {
+            height: 1px;
+            background: var(--border);
+            margin: 16px 0;
+        }
+
+        /* ========== Loading Spinner ========== */
+        .loading-card {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 20px;
+        }
+
+        .spinner {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 3px solid var(--border);
+            border-top-color: var(--blue);
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            flex: 1;
+        }
+
+        .loading-text strong {
+            display: block;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--blue-600);
+            margin-bottom: 4px;
+        }
+
+        .loading-text span {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        /* ========== Quick Feedback ========== */
+        .quick-feedback {
+            padding: 16px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            margin-bottom: 16px;
+        }
+
+        /* ========== Panel Overlay (History / Settings) ========== */
+        .panel-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(4px);
+            z-index: 200;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .panel-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .panel {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 400px;
+            max-width: 100%;
+            height: 100%;
+            background: white;
+            box-shadow: var(--shadow-xl);
+            z-index: 201;
+            transition: right 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .panel.active {
+            right: 0;
+        }
+
+        .panel-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .panel-header h2 {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .panel-close {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            border: none;
+            background: var(--bg-secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--muted);
+            transition: all 0.15s ease;
+        }
+
+        .panel-close:hover {
+            background: var(--border);
+            color: var(--text);
+        }
+
+        .panel-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+        }
+
+        /* ========== History List ========== */
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .history-item {
+            padding: 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            transition: all 0.15s ease;
+            cursor: pointer;
+        }
+
+        .history-item:hover {
+            border-color: var(--border-hover);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .history-item-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .history-item-date {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .history-item-score {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--blue-600);
+        }
+
+        .history-item-question {
+            font-size: 13px;
+            color: var(--text);
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .history-empty {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--muted);
+        }
+
+        .history-empty svg {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        /* ========== Settings Panel ========== */
+        .settings-group {
+            margin-bottom: 24px;
+        }
+
+        .settings-group-title {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 12px;
+        }
+
+        .settings-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            margin-bottom: 8px;
+        }
+
+        .settings-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .settings-item-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .settings-item-desc {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 2px;
+        }
+
+        /* Toggle Switch */
+        .toggle {
+            position: relative;
+            width: 44px;
+            height: 24px;
+            background: var(--border);
+            border-radius: 999px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .toggle::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.2s ease;
+        }
+
+        .toggle.active {
+            background: var(--blue);
+        }
+
+        .toggle.active::after {
+            transform: translateX(20px);
+        }
+
+        /* Language Select */
+        .select {
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: white;
+            font-size: 13px;
+            color: var(--text);
+            cursor: pointer;
+        }
+
+        /* ========== Pronunciation Card ========== */
+        .pronunciation-card .card-header-icon {
+            background: var(--green-50);
+            color: var(--green);
+        }
+
+        /* ========== Responsive ========== */
+        @media (max-width: 768px) {
+            .navbar-inner {
+                padding: 0 16px;
+                height: auto;
+                flex-wrap: wrap;
+                padding: 12px 16px;
+                gap: 12px;
+            }
+
+            .nav-links {
+                order: 3;
+                width: 100%;
+                justify-content: center;
+            }
+
+            .nav-actions {
+                gap: 8px;
+            }
+
+            .api-key-field {
+                display: none;
+            }
+
+            .app-container {
+                padding: 16px;
+            }
+
+            .controls-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .controls-left {
+                justify-content: center;
+            }
+
+            .controls-right {
+                justify-content: center;
+            }
+
+            .panel {
+                width: 100%;
+            }
+        }
+
+        .muted {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        /* Mobile API key field in nav */
+        @media (max-width: 768px) {
+            .api-key-mobile {
+                display: flex;
+                margin-bottom: 12px;
+            }
+
+            .api-key-mobile .api-key-field {
+                display: flex;
+                flex: 1;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .api-key-mobile {
+                display: none;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="app">
-        <div class="shell">
-            <header class="topbar">
-                <div class="brand">
-                    <div class="brand-badge" aria-hidden="true">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
-                            <path d="M4 7l8-4 8 4"></path>
-                            <path d="M4 7v10l8 4 8-4V7"></path>
-                            <path d="M12 3v18"></path>
-                        </svg>
-                    </div>
-                    <div class="brand-title">
-                        <strong>IELTS Speaking Coach</strong>
-                        <span>Practice / Exam • AI feedback</span>
-                    </div>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="navbar-inner">
+            <a href="#" class="nav-brand">
+                <div class="nav-brand-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
+                        <path d="M4 7l8-4 8 4"></path>
+                        <path d="M4 7v10l8 4 8-4V7"></path>
+                        <path d="M12 3v18"></path>
+                    </svg>
                 </div>
-
-                <div class="topbar-controls">
-                    <div class="field" title="Keys are stored locally in your browser">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16" style="color:var(--muted)">
-                            <rect x="3" y="11" width="18" height="11" rx="2"></rect>
-                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                        </svg>
-                        <input type="password" id="api-key-input" placeholder="DeepSeek API Key..." autocomplete="off">
-                    </div>
-                    <button id="start-btn" class="btn btn-primary">Start</button>
-                    <div class="meta">
-                        <span>Mode: <span id="mode-label" style="color:var(--blue-600); font-weight:900;">Practice</span></span>
-                        <span id="exam-progress" class="hidden"></span>
-                    </div>
+                <div class="nav-brand-text">
+                    <span class="nav-brand-title">IELTS Speaking Coach</span>
+                    <span class="nav-brand-subtitle">AI-Powered Practice</span>
                 </div>
-            </header>
+            </a>
 
-            <div class="layout">
-                <div style="display:flex; flex-direction:column; gap:16px;">
-                    <section class="card" aria-label="Question">
-                        <div class="card-hd">
-                            <h2>Question</h2>
-                            <div class="actions-row">
-                                <span id="part-label" class="chip">PART 1</span>
-                                <button type="button" class="btn btn-icon btn-ghost" onclick="generateNewQuestion()" title="New question" aria-label="New question">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
-                                        <path d="M21 12a9 9 0 1 1-3-6.7"></path>
-                                        <path d="M21 3v7h-7"></path>
-                                    </svg>
+            <div class="nav-links">
+                <button class="nav-link active" onclick="showMainPanel()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                    </svg>
+                    <span>首页</span>
+                </button>
+                <button class="nav-link" onclick="openHistoryPanel()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    <span>历史记录</span>
+                </button>
+                <button class="nav-link" onclick="openSettingsPanel()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                    <span>设置</span>
+                </button>
+            </div>
+
+            <div class="nav-actions">
+                <div class="api-key-field" title="API Key stored locally">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path>
+                    </svg>
+                    <input type="password" id="api-key-input" placeholder="DeepSeek API Key..." autocomplete="off">
+                </div>
+                <button id="start-btn" class="btn btn-primary">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
+                        <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                    </svg>
+                    开始练习
+                </button>
+                <div class="badge badge-blue">
+                    <span>Mode:</span>
+                    <strong id="mode-label">Practice</strong>
+                </div>
+                <span id="exam-progress" class="badge badge-amber hidden"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main App Container -->
+    <div class="app-container">
+        <!-- Mobile API Key -->
+        <div class="api-key-mobile">
+            <div class="api-key-field">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path>
+                </svg>
+                <input type="password" class="api-key-input-mobile" placeholder="DeepSeek API Key..." autocomplete="off">
+            </div>
+        </div>
+
+        <div class="main-layout">
+            <!-- Left Column: Question & Transcript -->
+            <div class="left-column">
+                <!-- Question Card -->
+                <section class="card" aria-label="Question">
+                    <div class="card-header">
+                        <div class="card-header-left">
+                            <div class="card-header-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                                </svg>
+                            </div>
+                            <h2 class="card-title">当前问题</h2>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span id="part-label" class="badge badge-blue">PART 1</span>
+                            <button type="button" class="btn btn-icon btn-ghost" onclick="generateNewQuestion()" title="换一题" aria-label="New question">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 12a9 9 0 1 1-3-6.7"></path>
+                                    <path d="M21 3v7h-7"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="question-meta">
+                            <div class="badge badge-blue" style="padding: 8px 14px;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14">
+                                    <path d="M12 20h9"></path>
+                                    <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"></path>
+                                </svg>
+                                <span id="part-progress">Loading...</span>
+                            </div>
+                        </div>
+                        
+                        <h2 id="current-question" class="question-display">Loading IELTS question...</h2>
+
+                        <div class="divider"></div>
+
+                        <!-- Prep Timer (Part 2) -->
+                        <div id="prep-box" class="hidden prep-box">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            <span>You have <strong><span id="prep-seconds">30</span>s</strong> to prepare. Recording will unlock automatically.</span>
+                        </div>
+
+                        <!-- Controls -->
+                        <div class="controls-row" style="margin-top: 16px;">
+                            <div class="controls-left">
+                                <button id="record-btn" class="btn btn-primary btn-record">
+                                    <span id="mic-icon" aria-hidden="true">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3Z"></path>
+                                            <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                                            <path d="M12 19v4"></path>
+                                            <path d="M8 23h8"></path>
+                                        </svg>
+                                    </span>
+                                    <span id="stop-icon" class="hidden" aria-hidden="true">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <rect x="6" y="6" width="12" height="12" rx="2"></rect>
+                                        </svg>
+                                    </span>
+                                    <span>开始录音</span>
                                 </button>
+                                <span class="status-text" id="status-text">点击开始回答</span>
                             </div>
-                        </div>
-                        <div class="card-bd">
-                            <div class="question-meta">
-                                <div class="chip" style="padding:8px 12px;">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
-                                        <path d="M12 20h9"></path>
-                                        <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"></path>
-                                    </svg>
-                                    <span id="part-progress">Loading...</span>
+                            <div class="controls-right">
+                                <div class="mode-toggle">
+                                    <button id="mode-practice" class="btn active">练习</button>
+                                    <button id="mode-exam" class="btn">模考</button>
                                 </div>
-                            </div>
-                            <h2 id="current-question" class="question">Loading IELTS question...</h2>
-
-                            <div class="divider"></div>
-
-                            <div id="prep-box" class="hidden prep">
-                                You have <strong><span id="prep-seconds">30</span>s</strong> to prepare. Recording will unlock automatically.
-                            </div>
-
-                            <div class="actions-row" style="margin-top:14px; justify-content:space-between;">
-                                <div class="actions-row">
-                                    <button id="record-btn" class="btn btn-primary speak">
-                                        <span id="mic-icon" aria-hidden="true">
-                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3Z"></path>
-                                                <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
-                                                <path d="M12 19v4"></path>
-                                                <path d="M8 23h8"></path>
-                                            </svg>
-                                        </span>
-                                        <span id="stop-icon" class="hidden" aria-hidden="true">
-                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <rect x="7" y="7" width="10" height="10" rx="2"></rect>
-                                            </svg>
-                                        </span>
-                                        <span>Speak</span>
-                                    </button>
-                                    <div class="subtle" id="status-text">Tap to start answering</div>
-                                </div>
-                                <div class="slider" aria-label="Controls">
-                                    <button id="mode-practice" class="btn btn-primary">Practice</button>
-                                    <button id="mode-exam" class="btn btn-ghost">Exam</button>
-                                    <span class="subtle" style="font-weight:900;">Part 2 Prep</span>
+                                <div class="slider-group">
+                                    <span class="slider-label">Part 2 准备</span>
                                     <input id="prep-slider" type="range" min="0" max="180" step="5" value="30">
-                                    <span id="prep-value" class="chip" style="padding:6px 10px; letter-spacing:0;">30s</span>
-                                </div>
-                            </div>
-
-                            <div style="margin-top:14px;">
-                                <div id="part-section" class="parts">
-                                    <div onclick="setPart('part1')" id="btn-part1" class="part-card active">
-                                        <strong>Part 1</strong>
-                                        <span>Personal questions</span>
-                                    </div>
-                                    <div onclick="setPart('part2')" id="btn-part2" class="part-card">
-                                        <strong>Part 2</strong>
-                                        <span>Cue card talk</span>
-                                    </div>
-                                    <div onclick="setPart('part3')" id="btn-part3" class="part-card">
-                                        <strong>Part 3</strong>
-                                        <span>Deep discussion</span>
-                                    </div>
+                                    <span id="prep-value" class="badge badge-blue" style="min-width: 45px; justify-content: center;">30s</span>
                                 </div>
                             </div>
                         </div>
-                    </section>
 
-                    <section class="card" aria-label="Transcript">
-                        <div class="card-hd">
-                            <h2>Transcript</h2>
-                            <span class="subtle">Speech-to-text</span>
-                        </div>
-                        <div class="card-bd">
-                            <div id="transcript-container" class="hidden">
-                                <div id="transcript-text" class="transcript"></div>
-                            </div>
-                            <div id="transcript-empty" class="subtle">Your transcript will appear here after you start speaking.</div>
-                        </div>
-                    </section>
-                </div>
-
-                <div style="display:flex; flex-direction:column; gap:16px;">
-                    <div id="loading-analysis" class="hidden card">
-                        <div class="card-bd" style="display:flex; align-items:center; gap:12px;">
-                            <div class="spinner" aria-hidden="true"></div>
-                            <div>
-                                <div style="font-weight:900; color:var(--blue-600);">Grading your response…</div>
-                                <div class="subtle">Quick feedback first, detailed feedback next.</div>
+                        <!-- Part Selection -->
+                        <div style="margin-top: 16px;">
+                            <div id="part-section" class="parts-grid">
+                                <div onclick="setPart('part1')" id="btn-part1" class="part-card active">
+                                    <strong>Part 1</strong>
+                                    <span>个人问题</span>
+                                </div>
+                                <div onclick="setPart('part2')" id="btn-part2" class="part-card">
+                                    <strong>Part 2</strong>
+                                    <span>话题卡</span>
+                                </div>
+                                <div onclick="setPart('part3')" id="btn-part3" class="part-card">
+                                    <strong>Part 3</strong>
+                                    <span>深度讨论</span>
+                                </div>
                             </div>
                         </div>
                     </div>
+                </section>
 
-                    <section id="results-area" class="hidden fade-in card" aria-label="Scores and feedback">
-                        <div class="card-hd">
-                            <h2>Scores</h2>
-                            <span class="subtle">IELTS-style</span>
+                <!-- Transcript Card -->
+                <section class="card" aria-label="Transcript">
+                    <div class="card-header">
+                        <div class="card-header-left">
+                            <div class="card-header-icon" style="background: var(--green-50); color: var(--green);">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                                </svg>
+                            </div>
+                            <h2 class="card-title">语音转文字</h2>
                         </div>
-                        <div class="card-bd" style="display:flex; flex-direction:column; gap:14px;">
-                            <div id="quick-feedback-card" class="hidden" style="border:1px solid var(--border); border-radius:14px; padding:12px 14px; background:#fff;">
-                                <div class="section-title" style="margin-bottom:6px;">Quick feedback</div>
-                                <div id="quick-feedback-text" class="text-block"></div>
-                                <div id="quick-feedback-status" class="subtle" style="margin-top:8px;"></div>
-                            </div>
-
-                            <div class="score-grid" aria-label="Main scores">
-                                <div class="score">
-                                    <label>Overall</label>
-                                    <strong id="res-overall">0.0</strong>
-                                    <div class="bar"><div id="bar-overall"></div></div>
-                                </div>
-                                <div class="score">
-                                    <label>Grammar</label>
-                                    <strong id="res-grammar">0.0</strong>
-                                    <div class="bar"><div id="bar-grammar"></div></div>
-                                </div>
-                                <div class="score">
-                                    <label>Vocabulary</label>
-                                    <strong id="res-vocab">0.0</strong>
-                                    <div class="bar"><div id="bar-vocab"></div></div>
-                                </div>
-                                <div class="score">
-                                    <label>Fluency</label>
-                                    <strong id="res-fluency">0.0</strong>
-                                    <div class="bar"><div id="bar-fluency"></div></div>
-                                </div>
-                            </div>
-
-                            <div class="divider"></div>
-
-                            <div>
-                                <div class="section-title">Examiner feedback (EN)</div>
-                                <div id="feedback-en" class="text-block"></div>
-                                <div style="height:10px"></div>
-                                <div class="section-title">考官反馈 (中文)</div>
-                                <div id="feedback-zh" class="text-block"></div>
-                            </div>
-
-                            <div class="divider"></div>
-
-                            <div>
-                                <div class="section-title">How to improve (EN)</div>
-                                <div id="suggestions-en" class="text-block"></div>
-                                <div style="height:10px"></div>
-                                <div class="section-title">提升建议 (中文)</div>
-                                <div id="suggestions-zh" class="text-block"></div>
-                            </div>
+                        <span class="badge badge-green">实时识别</span>
+                    </div>
+                    <div class="card-body">
+                        <div id="transcript-container" class="hidden">
+                            <div id="transcript-text" class="transcript-box"></div>
                         </div>
-                    </section>
+                        <div id="transcript-empty" class="empty-state">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="40" height="40" style="margin: 0 auto 12px; display: block; opacity: 0.4;">
+                                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3Z"></path>
+                                <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                                <path d="M12 19v4"></path>
+                                <path d="M8 23h8"></path>
+                            </svg>
+                            开始录音后，您的语音将显示在这里
+                        </div>
+                    </div>
+                </section>
+            </div>
 
-                    <section id="pronunciation-details" class="hidden card" aria-label="Pronunciation analysis">
-                        <div class="card-hd">
-                            <h2>Pronunciation</h2>
-                            <span class="chip" style="letter-spacing:0;">Beta</span>
+            <!-- Right Column: Scores & Feedback -->
+            <div class="right-column">
+                <!-- Loading State -->
+                <div id="loading-analysis" class="hidden card">
+                    <div class="loading-card">
+                        <div class="spinner" aria-hidden="true"></div>
+                        <div class="loading-text">
+                            <strong>正在评分...</strong>
+                            <span>先给出快速反馈，详细评分随后到来</span>
                         </div>
-                        <div class="card-bd" style="display:flex; flex-direction:column; gap:12px;">
-                            <div class="score-grid">
-                                <div class="score">
-                                    <label>Accuracy</label>
-                                    <strong id="res-accuracy">0</strong>
-                                    <div class="bar"><div id="bar-accuracy"></div></div>
-                                </div>
-                                <div class="score">
-                                    <label>Fluency</label>
-                                    <strong id="res-fluency-p">0</strong>
-                                    <div class="bar"><div id="bar-fluency-p"></div></div>
-                                </div>
-                                <div class="score">
-                                    <label>Completeness</label>
-                                    <strong id="res-completeness">0</strong>
-                                    <div class="bar"><div id="bar-completeness"></div></div>
-                                </div>
-                                <div class="score">
-                                    <label>Score</label>
-                                    <strong id="res-pron-score">0</strong>
-                                    <div class="bar"><div id="bar-pron"></div></div>
-                                </div>
-                            </div>
-                            <div class="transcript" style="font-size:13px;" id="pron-feedback-text"></div>
-                            <div class="subtle">AI-simulated pronunciation score. A professional SOE API can be connected later.</div>
-                        </div>
-                    </section>
+                    </div>
                 </div>
+
+                <!-- Results Area -->
+                <section id="results-area" class="hidden fade-in card" aria-label="Scores and feedback">
+                    <div class="card-header">
+                        <div class="card-header-left">
+                            <div class="card-header-icon" style="background: var(--amber-50); color: var(--amber);">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                </svg>
+                            </div>
+                            <h2 class="card-title">评分结果</h2>
+                        </div>
+                        <span class="badge badge-amber">IELTS 评分</span>
+                    </div>
+                    <div class="card-body">
+                        <!-- Quick Feedback -->
+                        <div id="quick-feedback-card" class="hidden quick-feedback">
+                            <div class="section-title">快速反馈</div>
+                            <div id="quick-feedback-text" class="feedback-text"></div>
+                            <div id="quick-feedback-status" class="status-text" style="margin-top: 8px;"></div>
+                        </div>
+
+                        <!-- Score Grid -->
+                        <div class="scores-grid" aria-label="Main scores">
+                            <div class="score-card">
+                                <div class="score-label">总分</div>
+                                <div class="score-value" id="res-overall">0.0</div>
+                                <div class="score-bar"><div id="bar-overall" class="score-bar-fill"></div></div>
+                            </div>
+                            <div class="score-card">
+                                <div class="score-label">语法</div>
+                                <div class="score-value" id="res-grammar">0.0</div>
+                                <div class="score-bar"><div id="bar-grammar" class="score-bar-fill"></div></div>
+                            </div>
+                            <div class="score-card">
+                                <div class="score-label">词汇</div>
+                                <div class="score-value" id="res-vocab">0.0</div>
+                                <div class="score-bar"><div id="bar-vocab" class="score-bar-fill"></div></div>
+                            </div>
+                            <div class="score-card">
+                                <div class="score-label">流利度</div>
+                                <div class="score-value" id="res-fluency">0.0</div>
+                                <div class="score-bar"><div id="bar-fluency" class="score-bar-fill"></div></div>
+                            </div>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <!-- Feedback Sections -->
+                        <div class="feedback-section">
+                            <div class="section-title">Examiner Feedback (EN)</div>
+                            <div id="feedback-en" class="feedback-text"></div>
+                        </div>
+                        <div class="feedback-section">
+                            <div class="section-title">考官反馈 (中文)</div>
+                            <div id="feedback-zh" class="feedback-text"></div>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <div class="feedback-section">
+                            <div class="section-title">How to Improve (EN)</div>
+                            <div id="suggestions-en" class="feedback-text"></div>
+                        </div>
+                        <div class="feedback-section">
+                            <div class="section-title">提升建议 (中文)</div>
+                            <div id="suggestions-zh" class="feedback-text"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Pronunciation Details -->
+                <section id="pronunciation-details" class="hidden card pronunciation-card" aria-label="Pronunciation analysis">
+                    <div class="card-header">
+                        <div class="card-header-left">
+                            <div class="card-header-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M2 10v3"></path>
+                                    <path d="M6 6v11"></path>
+                                    <path d="M10 3v18"></path>
+                                    <path d="M14 8v7"></path>
+                                    <path d="M18 5v13"></path>
+                                    <path d="M22 10v3"></path>
+                                </svg>
+                            </div>
+                            <h2 class="card-title">发音分析</h2>
+                        </div>
+                        <span class="badge badge-green">Beta</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="scores-grid">
+                            <div class="score-card">
+                                <div class="score-label">准确度</div>
+                                <div class="score-value" id="res-accuracy">0</div>
+                                <div class="score-bar"><div id="bar-accuracy" class="score-bar-fill"></div></div>
+                            </div>
+                            <div class="score-card">
+                                <div class="score-label">流畅度</div>
+                                <div class="score-value" id="res-fluency-p">0</div>
+                                <div class="score-bar"><div id="bar-fluency-p" class="score-bar-fill"></div></div>
+                            </div>
+                            <div class="score-card">
+                                <div class="score-label">完整度</div>
+                                <div class="score-value" id="res-completeness">0</div>
+                                <div class="score-bar"><div id="bar-completeness" class="score-bar-fill"></div></div>
+                            </div>
+                            <div class="score-card">
+                                <div class="score-label">发音分</div>
+                                <div class="score-value" id="res-pron-score">0</div>
+                                <div class="score-bar"><div id="bar-pron" class="score-bar-fill"></div></div>
+                            </div>
+                        </div>
+                        <div class="feedback-section" style="margin-top: 16px;">
+                            <div id="pron-feedback-text" class="feedback-text"></div>
+                        </div>
+                        <p class="status-text" style="margin-top: 12px;">AI 模拟发音评分。后续可接入专业语音评测 API。</p>
+                    </div>
+                </section>
             </div>
         </div>
     </div>
 
+    <!-- History Panel Overlay -->
+    <div id="history-overlay" class="panel-overlay" onclick="closeHistoryPanel()"></div>
+    <div id="history-panel" class="panel">
+        <div class="panel-header">
+            <h2>历史记录</h2>
+            <button class="panel-close" onclick="closeHistoryPanel()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+        <div class="panel-body">
+            <div class="history-list">
+                <!-- Placeholder History Items -->
+                <div class="history-item">
+                    <div class="history-item-header">
+                        <span class="history-item-date">2026-03-23 14:30</span>
+                        <span class="history-item-score">7.0</span>
+                    </div>
+                    <div class="history-item-question">Describe a time when you helped someone. You should say who you helped, how you helped them...</div>
+                </div>
+                <div class="history-item">
+                    <div class="history-item-header">
+                        <span class="history-item-date">2026-03-22 10:15</span>
+                        <span class="history-item-score">6.5</span>
+                    </div>
+                    <div class="history-item-question">Do you prefer to live in a house or an apartment? Why?</div>
+                </div>
+                <div class="history-item">
+                    <div class="history-item-header">
+                        <span class="history-item-date">2026-03-21 16:45</span>
+                        <span class="history-item-score">7.5</span>
+                    </div>
+                    <div class="history-item-question">What do you think about the impact of technology on education?</div>
+                </div>
+            </div>
+            <p class="status-text" style="text-align: center; margin-top: 24px;">这是占位数据。历史记录功能即将上线。</p>
+        </div>
+    </div>
+
+    <!-- Settings Panel Overlay -->
+    <div id="settings-overlay" class="panel-overlay" onclick="closeSettingsPanel()"></div>
+    <div id="settings-panel" class="panel">
+        <div class="panel-header">
+            <h2>设置</h2>
+            <button class="panel-close" onclick="closeSettingsPanel()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+        <div class="panel-body">
+            <!-- Language Settings -->
+            <div class="settings-group">
+                <div class="settings-group-title">语言设置</div>
+                <div class="settings-item">
+                    <div>
+                        <div class="settings-item-label">界面语言</div>
+                        <div class="settings-item-desc">选择界面显示语言</div>
+                    </div>
+                    <select class="select">
+                        <option value="zh">中文</option>
+                        <option value="en">English</option>
+                    </select>
+                </div>
+                <div class="settings-item">
+                    <div>
+                        <div class="settings-item-label">反馈语言</div>
+                        <div class="settings-item-desc">AI 反馈显示语言</div>
+                    </div>
+                    <select class="select">
+                        <option value="both">中英双语</option>
+                        <option value="en">English Only</option>
+                        <option value="zh">仅中文</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Sound Settings -->
+            <div class="settings-group">
+                <div class="settings-group-title">声音设置</div>
+                <div class="settings-item">
+                    <div>
+                        <div class="settings-item-label">提示音</div>
+                        <div class="settings-item-desc">录音开始/结束时播放提示音</div>
+                    </div>
+                    <div class="toggle active" onclick="this.classList.toggle('active')"></div>
+                </div>
+                <div class="settings-item">
+                    <div>
+                        <div class="settings-item-label">倒计时提示</div>
+                        <div class="settings-item-desc">Part 2 准备时间倒计时提示</div>
+                    </div>
+                    <div class="toggle active" onclick="this.classList.toggle('active')"></div>
+                </div>
+            </div>
+
+            <!-- Practice Settings -->
+            <div class="settings-group">
+                <div class="settings-group-title">练习设置</div>
+                <div class="settings-item">
+                    <div>
+                        <div class="settings-item-label">自动换题</div>
+                        <div class="settings-item-desc">回答完成后自动切换下一题</div>
+                    </div>
+                    <div class="toggle" onclick="this.classList.toggle('active')"></div>
+                </div>
+                <div class="settings-item">
+                    <div>
+                        <div class="settings-item-label">显示发音分析</div>
+                        <div class="settings-item-desc">展示 AI 发音评估结果</div>
+                    </div>
+                    <div class="toggle active" onclick="this.classList.toggle('active')"></div>
+                </div>
+            </div>
+
+            <p class="status-text" style="text-align: center; margin-top: 24px;">这是占位设置。设置功能即将上线。</p>
+        </div>
+    </div>
+
     <script>
+        // ========== Panel Functions ==========
+        function openHistoryPanel() {
+            document.getElementById('history-overlay').classList.add('active');
+            document.getElementById('history-panel').classList.add('active');
+            updateNavLinks('history');
+        }
+
+        function closeHistoryPanel() {
+            document.getElementById('history-overlay').classList.remove('active');
+            document.getElementById('history-panel').classList.remove('active');
+            updateNavLinks('home');
+        }
+
+        function openSettingsPanel() {
+            document.getElementById('settings-overlay').classList.add('active');
+            document.getElementById('settings-panel').classList.add('active');
+            updateNavLinks('settings');
+        }
+
+        function closeSettingsPanel() {
+            document.getElementById('settings-overlay').classList.remove('active');
+            document.getElementById('settings-panel').classList.remove('active');
+            updateNavLinks('home');
+        }
+
+        function showMainPanel() {
+            closeHistoryPanel();
+            closeSettingsPanel();
+            updateNavLinks('home');
+        }
+
+        function updateNavLinks(active) {
+            document.querySelectorAll('.nav-link').forEach((link, idx) => {
+                link.classList.remove('active');
+                if ((active === 'home' && idx === 0) || 
+                    (active === 'history' && idx === 1) || 
+                    (active === 'settings' && idx === 2)) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        // ========== Original App Logic ==========
         let currentPart = 'part1';
         let currentMode = 'practice';
         let isRecording = false;
@@ -688,11 +1593,20 @@
         const prepValue = document.getElementById('prep-value');
         let prepSecondsSetting = 30;
 
+        // Sync mobile API key input
+        const mobileApiInput = document.querySelector('.api-key-input-mobile');
+        if (mobileApiInput) {
+            mobileApiInput.addEventListener('change', () => {
+                apiKeyInput.value = mobileApiInput.value;
+                localStorage.setItem('deepseek_api_key', mobileApiInput.value);
+            });
+        }
+
         function sanitizeQuestionForHistory(q) {
             if (!q) return '';
             let s = String(q);
             s = s.replace(/[\r\n]+/g, ' ');
-            s = s.replace(/["'‘’“”]/g, '');
+            s = s.replace(/["'''""]/g, '');
             s = s.replace(/^\s*(\d+\.\s*|\d+\)\s*|Q\d+\s*[:\-]\s*)/i, '');
             s = s.replace(/\s+/g, ' ').trim();
             return s;
@@ -713,6 +1627,8 @@
             }
             
             apiKeyInput.value = localStorage.getItem('deepseek_api_key') || '';
+            if (mobileApiInput) mobileApiInput.value = apiKeyInput.value;
+            
             const savedPrep = localStorage.getItem('part2_prep_seconds');
             if (savedPrep !== null && savedPrep !== undefined && savedPrep !== '') {
                 const n = parseInt(savedPrep, 10);
@@ -732,6 +1648,7 @@
             });
             apiKeyInput.addEventListener('change', () => {
                 localStorage.setItem('deepseek_api_key', apiKeyInput.value);
+                if (mobileApiInput) mobileApiInput.value = apiKeyInput.value;
                 if (apiKeyInput.value.trim()) {
                     setMode(currentMode);
                 }
@@ -746,7 +1663,7 @@
             if (apiKeyInput.value.trim()) {
                 setMode('practice');
             } else {
-                questionText.textContent = "Paste your DeepSeek API key to start.";
+                questionText.textContent = "请输入 DeepSeek API Key 开始练习";
                 updateModeUI();
             }
         }
@@ -754,15 +1671,11 @@
         function updateModeUI(total = 0, index = 0) {
             modeLabel.textContent = currentMode === 'exam' ? 'Exam' : 'Practice';
             if (currentMode === 'practice') {
-                modePracticeBtn.classList.add('btn-primary');
-                modePracticeBtn.classList.remove('btn-ghost');
-                modeExamBtn.classList.add('btn-ghost');
-                modeExamBtn.classList.remove('btn-primary');
+                modePracticeBtn.classList.add('active');
+                modeExamBtn.classList.remove('active');
             } else {
-                modeExamBtn.classList.add('btn-primary');
-                modeExamBtn.classList.remove('btn-ghost');
-                modePracticeBtn.classList.add('btn-ghost');
-                modePracticeBtn.classList.remove('btn-primary');
+                modeExamBtn.classList.add('active');
+                modePracticeBtn.classList.remove('active');
             }
 
             if (currentMode === 'exam') {
@@ -794,7 +1707,7 @@
         async function setMode(mode) {
             const apiKey = apiKeyInput.value.trim();
             if (!apiKey) {
-                alert("Please enter your DeepSeek API key first.");
+                alert("请先输入 DeepSeek API Key");
                 return;
             }
 
@@ -834,10 +1747,10 @@
                 transcriptText.textContent = '';
                 transcriptContainer.classList.add('hidden');
                 if (transcriptEmpty) transcriptEmpty.classList.remove('hidden');
-                statusText.textContent = "Tap to start answering";
+                statusText.textContent = "点击开始回答";
                 recordBtn.disabled = false;
             } catch (err) {
-                alert("Failed to set mode: " + err.message);
+                alert("设置模式失败: " + err.message);
             }
         }
 
@@ -858,7 +1771,7 @@
                 recordBtn.disabled = true;
                 let remaining = seconds;
                 prepSecondsEl.textContent = remaining;
-                statusText.textContent = "Prepare first...";
+                statusText.textContent = "准备中...";
                 prepTimer = setInterval(() => {
                     remaining -= 1;
                     prepSecondsEl.textContent = Math.max(0, remaining);
@@ -867,7 +1780,7 @@
                         prepTimer = null;
                         prepBox.classList.add('hidden');
                         recordBtn.disabled = false;
-                        statusText.textContent = "Tap to start answering";
+                        statusText.textContent = "点击开始回答";
                     }
                 }, 1000);
             } else {
@@ -879,7 +1792,7 @@
         function setupSpeechRecognition() {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             if (!SpeechRecognition) {
-                alert("Web Speech API not supported. Please use Chrome.");
+                alert("Web Speech API 不支持，请使用 Chrome 浏览器。");
                 return;
             }
             
@@ -893,7 +1806,7 @@
                 recordBtn.classList.add('pulse-recording');
                 document.getElementById('mic-icon').classList.add('hidden');
                 document.getElementById('stop-icon').classList.remove('hidden');
-                statusText.textContent = "Listening...";
+                statusText.textContent = "正在聆听...";
                 transcriptContainer.classList.remove('hidden');
                 if (transcriptEmpty) transcriptEmpty.classList.add('hidden');
                 resultsArea.classList.add('hidden');
@@ -934,14 +1847,14 @@
             recordBtn.classList.remove('pulse-recording');
             document.getElementById('mic-icon').classList.remove('hidden');
             document.getElementById('stop-icon').classList.add('hidden');
-            statusText.textContent = "Analyzing...";
+            statusText.textContent = "正在分析...";
 
             analyzeAnswer();
         }
 
         async function analyzeAnswer() {
             if (!finalTranscript.trim()) {
-                statusText.textContent = "Tap to start answering";
+                statusText.textContent = "点击开始回答";
                 return;
             }
             
@@ -968,7 +1881,7 @@
                         resultsArea.classList.remove('hidden');
                         quickFeedbackCard.classList.remove('hidden');
                         quickFeedbackText.textContent = data.light_feedback || "Good start—add one reason or example.";
-                        quickFeedbackStatus.textContent = "Generating detailed feedback...";
+                        quickFeedbackStatus.textContent = "正在生成详细反馈...";
                         if (data.next_question) {
                             currentPart = data.next_part || currentPart;
                             highlightPart(currentPart);
@@ -988,13 +1901,13 @@
                             resultsArea.classList.remove('hidden');
                             quickFeedbackCard.classList.remove('hidden');
                             quickFeedbackText.textContent = data.light_feedback || "Exam finished—generating final score.";
-                            quickFeedbackStatus.textContent = "Generating final detailed score...";
-                            questionText.textContent = "Exam finished.";
+                            quickFeedbackStatus.textContent = "正在生成最终详细评分...";
+                            questionText.textContent = "模考结束";
                             recordBtn.disabled = true;
                             await pollHeavyResult(data.job_id);
                         } else {
                             displayResults(data.result || data);
-                            questionText.textContent = "Exam finished.";
+                            questionText.textContent = "模考结束";
                             recordBtn.disabled = true;
                         }
                     } else {
@@ -1008,17 +1921,17 @@
                         partProgress.textContent = data.next_progress_label || "";
                         setupPrep(data.next_step_type, data.next_prep_seconds || 0);
                         updateModeUI(data.total_questions || 0, data.question_index || 0);
-                        statusText.textContent = `Saved ${data.question_index}/${data.total_questions}. Tap to answer next.`;
+                        statusText.textContent = `已保存 ${data.question_index}/${data.total_questions}。点击回答下一题。`;
                         rememberHistory(data.next_question);
                     }
                 } else {
                     displayResults(data.result || data);
                 }
             } catch (err) {
-                alert("Analysis failed: " + err.message);
+                alert("分析失败: " + err.message);
             } finally {
                 loadingAnalysis.classList.add('hidden');
-                statusText.textContent = "Tap to start answering";
+                statusText.textContent = "点击开始回答";
             }
         }
 
@@ -1032,21 +1945,21 @@
                     if (data.status === 'done' && data.result) {
                         const meta = data.result && data.result._meta ? data.result._meta : null;
                         const tag = meta && meta.prompt_version ? ` (${meta.prompt_version})` : '';
-                        const warn = data.result && data.result.warning ? " (fallback used)" : "";
-                        quickFeedbackStatus.textContent = `Detailed feedback ready${tag}${warn}.`;
+                        const warn = data.result && data.result.warning ? " (使用了备用)" : "";
+                        quickFeedbackStatus.textContent = `详细反馈已就绪${tag}${warn}`;
                         displayResults(data.result);
                         return;
                     }
                     if (data.status === 'error') {
-                        quickFeedbackStatus.textContent = "Detailed feedback failed; showing quick feedback only.";
+                        quickFeedbackStatus.textContent = "详细反馈生成失败；仅显示快速反馈";
                         return;
                     }
                 } catch (e) {
-                    quickFeedbackStatus.textContent = "Waiting for detailed feedback...";
+                    quickFeedbackStatus.textContent = "等待详细反馈...";
                 }
                 await new Promise(r => setTimeout(r, intervalMs));
             }
-            quickFeedbackStatus.textContent = "Detailed feedback is taking longer than expected. You can continue to the next question.";
+            quickFeedbackStatus.textContent = "详细反馈需要更长时间。您可以继续下一题。";
         }
 
         function displayResults(data) {
@@ -1054,7 +1967,7 @@
             quickFeedbackCard.classList.add('hidden');
             if (data && data.warning) {
                 quickFeedbackCard.classList.remove('hidden');
-                quickFeedbackText.textContent = "Note: model output used fallback due to an error.";
+                quickFeedbackText.textContent = "注意：模型输出因错误使用了备用。";
                 quickFeedbackStatus.textContent = String(data.warning).slice(0, 160);
             }
             const clampNum = (v, lo, hi) => {
@@ -1106,14 +2019,14 @@
                 setPct('res-completeness', 'bar-completeness', null);
                 setPct('res-pron-score', 'bar-pron', null);
             }
-            window.scrollTo({ top: resultsArea.offsetTop - 50, behavior: 'smooth' });
+            window.scrollTo({ top: resultsArea.offsetTop - 100, behavior: 'smooth' });
         }
 
         async function generateNewQuestion() {
             if (currentMode === 'exam') return;
             const apiKey = apiKeyInput.value.trim();
             if (!apiKey) {
-                alert("Please enter your DeepSeek API key first.");
+                alert("请先输入 DeepSeek API Key");
                 return;
             }
             await setMode('practice');

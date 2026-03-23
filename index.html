@@ -3,658 +3,1720 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI IELTS Speaking Practice</title>
+    <title>IELTS Speaking AI Coach</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        :root{
-            --bg: #f6f8fc;
+        :root {
+            /* Primary Colors - Blue */
+            --primary: #2563eb;
+            --primary-light: #3b82f6;
+            --primary-dark: #1d4ed8;
+            --primary-50: #eff6ff;
+            --primary-100: #dbeafe;
+            --primary-200: #bfdbfe;
+            
+            /* Neutrals */
+            --bg: #f8fafc;
+            --bg-secondary: #f1f5f9;
             --card: #ffffff;
             --text: #0f172a;
+            --text-secondary: #475569;
             --muted: #64748b;
-            --border: #e6eaf2;
-            --blue: #2563eb;
-            --blue-600: #1d4ed8;
-            --blue-50: #eff6ff;
-            --shadow: 0 12px 40px rgba(2, 6, 23, 0.06);
+            --border: #e2e8f0;
+            --border-light: #f1f5f9;
+            
+            /* Accents */
+            --success: #10b981;
+            --success-light: #d1fae5;
+            --warning: #f59e0b;
+            --warning-light: #fef3c7;
+            --error: #ef4444;
+            --error-light: #fee2e2;
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+            --shadow-primary: 0 10px 30px -10px rgba(37, 99, 235, 0.35);
+            
+            /* Radius */
+            --radius-sm: 8px;
+            --radius: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
+            --radius-full: 9999px;
         }
 
-        * { box-sizing: border-box; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
         body {
-            font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: var(--bg);
             color: var(--text);
-            margin: 0;
+            line-height: 1.5;
+            min-height: 100vh;
         }
 
+        /* Utility Classes */
         .hidden { display: none !important; }
-        .fade-in { animation: fadeIn 0.35s ease-out forwards; }
-
+        
+        .fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+        
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .app {
-            min-height: 100vh;
-            padding: 24px 16px 40px;
-            display: flex;
-            justify-content: center;
+        /* ============================================
+           NAVIGATION BAR
+           ============================================ */
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
         }
 
-        .shell {
-            width: 100%;
-            max-width: 1120px;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .topbar {
+        .navbar-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+            height: 64px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 12px;
-            padding: 14px 16px;
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            box-shadow: var(--shadow);
         }
 
-        .brand {
+        .nav-brand {
             display: flex;
             align-items: center;
-            gap: 10px;
-            min-width: 240px;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--text);
         }
 
-        .brand-badge {
+        .nav-logo {
             width: 40px;
             height: 40px;
-            border-radius: 12px;
-            background: linear-gradient(135deg, var(--blue), #60a5fa);
-            display: grid;
-            place-items: center;
-            color: white;
-            flex: 0 0 auto;
-        }
-
-        .brand-title {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-            line-height: 1.1;
-        }
-
-        .brand-title strong { font-size: 18px; letter-spacing: -0.01em; }
-        .brand-title span { font-size: 12px; color: var(--muted); }
-
-        .topbar-controls {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border-radius: var(--radius);
             display: flex;
             align-items: center;
-            justify-content: flex-end;
-            flex-wrap: wrap;
-            gap: 10px;
-            flex: 1 1 auto;
+            justify-content: center;
+            color: white;
+            box-shadow: var(--shadow-primary);
         }
 
-        .field {
+        .nav-logo svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        .nav-title {
+            font-weight: 700;
+            font-size: 18px;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-subtitle {
+            font-size: 12px;
+            color: var(--muted);
+            font-weight: 500;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .nav-link {
             display: flex;
             align-items: center;
             gap: 8px;
-            padding: 10px 12px;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            background: #fff;
-            min-width: 280px;
-        }
-
-        .field input {
-            border: 0;
-            outline: none;
-            width: 100%;
-            font-size: 13px;
-            color: var(--text);
+            padding: 10px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: var(--radius);
+            transition: all 0.15s ease;
+            cursor: pointer;
+            border: none;
             background: transparent;
         }
 
-        .meta {
+        .nav-link:hover {
+            background: var(--bg-secondary);
+            color: var(--text);
+        }
+
+        .nav-link.active {
+            background: var(--primary-50);
+            color: var(--primary);
+        }
+
+        .nav-link svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .nav-actions {
             display: flex;
             align-items: center;
-            gap: 10px;
-            color: var(--muted);
-            font-size: 12px;
-            white-space: nowrap;
+            gap: 12px;
         }
 
-        .chip {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 10px;
-            border-radius: 999px;
-            background: var(--blue-50);
-            color: var(--blue-600);
-            border: 1px solid rgba(37, 99, 235, 0.15);
-            font-weight: 800;
-            font-size: 11px;
-            letter-spacing: 0.06em;
+        /* ============================================
+           MAIN LAYOUT
+           ============================================ */
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px;
         }
 
-        .layout {
+        .main-layout {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 16px;
+            gap: 24px;
         }
 
-        @media (min-width: 960px) {
-            .layout {
-                grid-template-columns: 1.2fr 0.8fr;
-                align-items: start;
+        @media (min-width: 1024px) {
+            .main-layout {
+                grid-template-columns: 1fr 380px;
             }
         }
 
+        .content-primary {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .content-secondary {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* ============================================
+           CARD COMPONENTS
+           ============================================ */
         .card {
             background: var(--card);
             border: 1px solid var(--border);
-            border-radius: 20px;
+            border-radius: var(--radius-xl);
             box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
         }
 
-        .card-hd {
-            padding: 16px 18px;
-            border-bottom: 1px solid var(--border);
+        .card:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .card-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-light);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 10px;
+            background: var(--bg-secondary);
         }
 
-        .card-hd h2 {
-            margin: 0;
+        .card-header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .card-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius);
+            background: var(--primary-50);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-icon svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .card-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text);
+            letter-spacing: -0.01em;
+        }
+
+        .card-subtitle {
             font-size: 12px;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
+            color: var(--muted);
+            margin-top: 2px;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        /* ============================================
+           API KEY INPUT
+           ============================================ */
+        .api-input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 14px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .api-input-wrapper:focus-within {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .api-input-wrapper svg {
+            width: 16px;
+            height: 16px;
+            color: var(--muted);
+            flex-shrink: 0;
+        }
+
+        .api-input-wrapper input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            font-size: 13px;
+            font-family: inherit;
+            color: var(--text);
+            outline: none;
+            min-width: 200px;
+        }
+
+        .api-input-wrapper input::placeholder {
             color: var(--muted);
         }
 
-        .card-bd { padding: 18px; }
-
-        .actions-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            align-items: center;
-        }
-
+        /* ============================================
+           BUTTONS
+           ============================================ */
         .btn {
-            appearance: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 18px;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: inherit;
+            border-radius: var(--radius);
             border: 1px solid var(--border);
-            background: #fff;
+            background: var(--card);
             color: var(--text);
-            border-radius: 12px;
-            padding: 10px 12px;
-            font-weight: 800;
-            font-size: 13px;
             cursor: pointer;
-            transition: transform .06s ease, background .15s ease, border-color .15s ease, box-shadow .15s ease;
+            transition: all 0.15s ease;
+            white-space: nowrap;
         }
 
-        .btn:hover { border-color: rgba(37, 99, 235, 0.3); }
-        .btn:active { transform: translateY(1px); }
-        .btn:disabled { opacity: .55; cursor: not-allowed; }
-        .btn:focus-visible { outline: 3px solid rgba(37,99,235,.25); outline-offset: 2px; }
+        .btn:hover {
+            background: var(--bg-secondary);
+            border-color: var(--border);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn:focus-visible {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+        }
 
         .btn-primary {
-            background: var(--blue);
-            border-color: rgba(37, 99, 235, 0.45);
+            background: var(--primary);
+            border-color: var(--primary);
             color: white;
-            box-shadow: 0 10px 24px rgba(37, 99, 235, 0.22);
+            box-shadow: var(--shadow-primary);
         }
 
-        .btn-primary:hover { background: var(--blue-600); }
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
 
         .btn-ghost {
-            background: #f1f5f9;
-            color: #334155;
-            border-color: #e2e8f0;
-            box-shadow: 0 6px 18px rgba(2, 6, 23, 0.04);
-        }
-        .btn-ghost:hover { background: #eaf0f8; }
-
-        .btn-icon {
-            width: 44px;
-            height: 44px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0;
-            border-radius: 14px;
+            background: var(--bg-secondary);
+            border-color: transparent;
+            color: var(--text-secondary);
         }
 
-        .speak {
-            width: 140px;
-            height: 56px;
-            border-radius: 999px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            font-size: 14px;
-            letter-spacing: .02em;
-        }
-
-        .speak svg { width: 18px; height: 18px; }
-
-        .pulse-recording { animation: pulse 1.5s infinite; }
-
-        @keyframes pulse {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.35); }
-            70% { transform: scale(1.03); box-shadow: 0 0 0 12px rgba(37, 99, 235, 0); }
-            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
-        }
-
-        .subtle {
-            color: var(--muted);
-            font-size: 12px;
-        }
-
-        .question {
-            font-size: 22px;
-            line-height: 1.32;
-            font-weight: 900;
-            margin: 0;
+        .btn-ghost:hover {
+            background: var(--border);
             color: var(--text);
         }
-        @media (min-width: 960px) {
-            .question { font-size: 24px; }
+
+        .btn-icon {
+            width: 40px;
+            height: 40px;
+            padding: 0;
+            border-radius: var(--radius);
+        }
+
+        .btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Speak Button */
+        .btn-speak {
+            width: 160px;
+            height: 56px;
+            border-radius: var(--radius-full);
+            font-size: 15px;
+            font-weight: 700;
+            gap: 10px;
+        }
+
+        .btn-speak svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .pulse-recording {
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4); }
+            50% { transform: scale(1.02); box-shadow: 0 0 0 15px rgba(37, 99, 235, 0); }
+        }
+
+        /* ============================================
+           CHIPS & BADGES
+           ============================================ */
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            font-size: 12px;
+            font-weight: 600;
+            border-radius: var(--radius-full);
+            background: var(--primary-50);
+            color: var(--primary);
+            border: 1px solid var(--primary-100);
+        }
+
+        .chip-success {
+            background: var(--success-light);
+            color: var(--success);
+            border-color: rgba(16, 185, 129, 0.2);
+        }
+
+        .chip-warning {
+            background: var(--warning-light);
+            color: var(--warning);
+            border-color: rgba(245, 158, 11, 0.2);
+        }
+
+        .chip svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        /* ============================================
+           QUESTION SECTION
+           ============================================ */
+        .question-card .card-body {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
 
         .question-meta {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 10px;
             flex-wrap: wrap;
-            margin-bottom: 10px;
+            gap: 12px;
         }
 
-        .prep {
-            padding: 12px 14px;
-            background: var(--blue-50);
-            border: 1px solid rgba(37, 99, 235, 0.16);
-            border-radius: 14px;
-            color: #1e3a8a;
+        .question-text {
+            font-size: 22px;
+            font-weight: 700;
+            line-height: 1.4;
+            color: var(--text);
+            letter-spacing: -0.02em;
         }
 
-        .prep strong { color: var(--blue-600); }
+        @media (min-width: 768px) {
+            .question-text { font-size: 26px; }
+        }
 
-        .parts {
+        .prep-box {
+            padding: 14px 18px;
+            background: linear-gradient(135deg, var(--primary-50), var(--primary-100));
+            border: 1px solid var(--primary-200);
+            border-radius: var(--radius);
+            color: var(--primary-dark);
+            font-weight: 500;
+        }
+
+        .prep-box strong {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        /* Part Selector */
+        .parts-grid {
             display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 10px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
         }
 
         .part-card {
+            padding: 14px 16px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            background: var(--card);
             cursor: pointer;
-            transition: border-color .15s ease, background .15s ease, transform .06s ease;
-            padding: 10px 12px;
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            background: #fff;
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-            text-align: left;
+            transition: all 0.15s ease;
+            text-align: center;
         }
 
-        .part-card:active { transform: translateY(1px); }
-        .part-card strong { font-size: 14px; }
-        .part-card span { font-size: 11px; color: var(--muted); }
+        .part-card:hover {
+            border-color: var(--primary-200);
+            background: var(--primary-50);
+        }
 
         .part-card.active {
-            border-color: rgba(37, 99, 235, 0.45);
-            background: var(--blue-50);
+            border-color: var(--primary);
+            background: var(--primary-50);
         }
 
-        .muted { opacity: .6; }
-
-        .transcript {
-            min-height: 120px;
-            border-radius: 14px;
-            background: #fbfcff;
-            border: 1px solid var(--border);
-            padding: 12px 14px;
-            white-space: pre-line;
-            color: #0f172a;
-        }
-
-        .score-grid {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 10px;
-        }
-
-        @media (min-width: 960px) {
-            .score-grid {
-                grid-template-columns: repeat(4, minmax(0, 1fr));
-            }
-        }
-
-        .score {
-            padding: 12px 12px;
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            background: #fff;
-            text-align: left;
-        }
-
-        .score label {
+        .part-card strong {
             display: block;
-            font-size: 11px;
-            font-weight: 900;
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+
+        .part-card span {
+            font-size: 12px;
             color: var(--muted);
-            text-transform: uppercase;
-            letter-spacing: .06em;
         }
 
-        .score strong {
-            display: block;
-            font-size: 24px;
-            margin-top: 8px;
-            color: var(--blue-600);
+        .part-card.active strong {
+            color: var(--primary);
         }
 
-        .bar {
-            margin-top: 10px;
-            height: 8px;
-            border-radius: 999px;
-            background: #e8eef9;
-            overflow: hidden;
-        }
-
-        .bar > div {
-            height: 100%;
-            width: 0%;
-            border-radius: 999px;
-            background: linear-gradient(90deg, var(--blue), #60a5fa);
-            transition: width 520ms ease;
-        }
-
-        .section-title {
-            font-size: 11px;
-            font-weight: 900;
-            letter-spacing: .08em;
-            text-transform: uppercase;
-            color: var(--muted);
-            margin: 0 0 10px;
-        }
-
-        .text-block {
-            white-space: pre-line;
-            color: #0f172a;
-            line-height: 1.6;
-            font-size: 13px;
-        }
-
-        .divider { height: 1px; background: var(--border); margin: 14px 0; }
-
-        .slider {
+        /* Controls Row */
+        .controls-row {
             display: flex;
             align-items: center;
-            gap: 10px;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .controls-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .controls-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
             flex-wrap: wrap;
         }
 
-        .slider input[type="range"] { width: 200px; accent-color: var(--blue); }
-
-        .spinner {
-            width: 32px;
-            height: 32px;
-            border-radius: 999px;
-            border: 4px solid rgba(37,99,235,.18);
-            border-top-color: var(--blue);
-            animation: spin 0.9s linear infinite;
+        .mode-toggle {
+            display: flex;
+            background: var(--bg-secondary);
+            border-radius: var(--radius);
+            padding: 4px;
         }
 
-        @keyframes spin { to { transform: rotate(360deg); } }
+        .mode-toggle .btn {
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            font-size: 13px;
+        }
+
+        .mode-toggle .btn.active {
+            background: var(--card);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .prep-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .prep-control span {
+            font-size: 12px;
+            color: var(--muted);
+            font-weight: 500;
+        }
+
+        .prep-control input[type="range"] {
+            width: 120px;
+            accent-color: var(--primary);
+        }
+
+        .status-text {
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        /* ============================================
+           TRANSCRIPT SECTION
+           ============================================ */
+        .transcript-box {
+            min-height: 100px;
+            padding: 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.7;
+            color: var(--text);
+        }
+
+        .transcript-empty {
+            color: var(--muted);
+            font-style: italic;
+        }
+
+        /* ============================================
+           SCORES SECTION
+           ============================================ */
+        .scores-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        @media (min-width: 640px) {
+            .scores-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .score-card {
+            padding: 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius);
+            text-align: left;
+        }
+
+        .score-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--muted);
+            margin-bottom: 8px;
+        }
+
+        .score-value {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--primary);
+            line-height: 1;
+        }
+
+        .score-bar {
+            margin-top: 12px;
+            height: 6px;
+            background: var(--border);
+            border-radius: var(--radius-full);
+            overflow: hidden;
+        }
+
+        .score-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            border-radius: var(--radius-full);
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+
+        /* Feedback Sections */
+        .feedback-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .section-title {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--muted);
+            margin-bottom: 12px;
+        }
+
+        .text-block {
+            font-size: 14px;
+            line-height: 1.7;
+            color: var(--text-secondary);
+            white-space: pre-wrap;
+        }
+
+        /* Quick Feedback */
+        .quick-feedback-box {
+            padding: 16px;
+            background: var(--primary-50);
+            border: 1px solid var(--primary-100);
+            border-radius: var(--radius);
+            margin-bottom: 20px;
+        }
+
+        .quick-feedback-box .section-title {
+            color: var(--primary);
+        }
+
+        .quick-feedback-status {
+            margin-top: 8px;
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        /* ============================================
+           LOADING SPINNER
+           ============================================ */
+        .loading-card {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 20px;
+        }
+
+        .spinner {
+            width: 36px;
+            height: 36px;
+            border: 3px solid var(--primary-100);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .loading-subtext {
+            font-size: 13px;
+            color: var(--muted);
+            margin-top: 4px;
+        }
+
+        /* ============================================
+           AI FEEDBACK PANEL (Right Side)
+           ============================================ */
+        .ai-panel .card-header {
+            background: linear-gradient(135deg, var(--primary-50), var(--primary-100));
+        }
+
+        .ai-panel .card-icon {
+            background: var(--primary);
+            color: white;
+        }
+
+        .ai-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 16px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius);
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        .ai-status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: blink 2s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        /* ============================================
+           HISTORY PANEL (Placeholder)
+           ============================================ */
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .history-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius);
+            transition: all 0.15s ease;
+            cursor: pointer;
+        }
+
+        .history-item:hover {
+            background: var(--card);
+            border-color: var(--border);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .history-item-left {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .history-date {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .history-part {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .history-score {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .history-empty {
+            text-align: center;
+            padding: 32px 20px;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        /* ============================================
+           SETTINGS PANEL (Placeholder)
+           ============================================ */
+        .settings-section {
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .settings-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .settings-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+        }
+
+        .settings-label {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .settings-label-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .settings-label-desc {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        /* Toggle Switch */
+        .toggle-switch {
+            position: relative;
+            width: 48px;
+            height: 26px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--border);
+            border-radius: var(--radius-full);
+            transition: 0.2s;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            border-radius: 50%;
+            transition: 0.2s;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .toggle-switch input:checked + .toggle-slider {
+            background-color: var(--primary);
+        }
+
+        .toggle-switch input:checked + .toggle-slider:before {
+            transform: translateX(22px);
+        }
+
+        /* Select Dropdown */
+        .settings-select {
+            padding: 8px 12px;
+            font-size: 13px;
+            font-family: inherit;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            background: var(--card);
+            color: var(--text);
+            cursor: pointer;
+            outline: none;
+        }
+
+        .settings-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        /* ============================================
+           SIDEBAR PANELS MODAL
+           ============================================ */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 200;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s ease, visibility 0.2s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .sidebar-panel {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 100%;
+            max-width: 400px;
+            height: 100%;
+            background: var(--card);
+            box-shadow: -10px 0 40px rgba(0, 0, 0, 0.1);
+            z-index: 201;
+            transition: right 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-panel.active {
+            right: 0;
+        }
+
+        .sidebar-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .sidebar-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .sidebar-close {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            background: var(--bg-secondary);
+            border-radius: var(--radius);
+            cursor: pointer;
+            color: var(--muted);
+            transition: all 0.15s ease;
+        }
+
+        .sidebar-close:hover {
+            background: var(--border);
+            color: var(--text);
+        }
+
+        .sidebar-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+        }
+
+        /* ============================================
+           PRONUNCIATION SECTION
+           ============================================ */
+        .pronunciation-card .card-header {
+            background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+        }
+
+        .pronunciation-card .card-icon {
+            background: var(--success);
+            color: white;
+        }
+
+        .pron-feedback-box {
+            padding: 16px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius);
+            font-size: 13px;
+            line-height: 1.7;
+            color: var(--text-secondary);
+            white-space: pre-wrap;
+        }
+
+        .pron-note {
+            margin-top: 12px;
+            font-size: 12px;
+            color: var(--muted);
+            font-style: italic;
+        }
+
+        /* ============================================
+           MUTED STATE
+           ============================================ */
+        .muted { opacity: 0.5; pointer-events: none; }
+
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
+        @media (max-width: 768px) {
+            .navbar-inner {
+                padding: 0 16px;
+            }
+            
+            .nav-subtitle,
+            .nav-links span {
+                display: none;
+            }
+            
+            .nav-link {
+                padding: 10px 12px;
+            }
+            
+            .main-container {
+                padding: 16px;
+            }
+            
+            .controls-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .controls-left,
+            .controls-right {
+                justify-content: center;
+            }
+        }
+
+        /* Divider helper */
+        .divider {
+            height: 1px;
+            background: var(--border-light);
+            margin: 16px 0;
+        }
     </style>
 </head>
 <body>
-    <div class="app">
-        <div class="shell">
-            <header class="topbar">
-                <div class="brand">
-                    <div class="brand-badge" aria-hidden="true">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
-                            <path d="M4 7l8-4 8 4"></path>
-                            <path d="M4 7v10l8 4 8-4V7"></path>
-                            <path d="M12 3v18"></path>
-                        </svg>
-                    </div>
-                    <div class="brand-title">
-                        <strong>IELTS Speaking Coach</strong>
-                        <span>Practice / Exam • AI feedback</span>
-                    </div>
+    <!-- ============================================
+         NAVIGATION BAR
+         包含：Logo + 首页 + 历史记录 + 设置
+         ============================================ -->
+    <nav class="navbar">
+        <div class="navbar-inner">
+            <a href="#" class="nav-brand">
+                <div class="nav-logo">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                        <path d="M2 17l10 5 10-5"></path>
+                        <path d="M2 12l10 5 10-5"></path>
+                    </svg>
                 </div>
-
-                <div class="topbar-controls">
-                    <div class="field" title="Keys are stored locally in your browser">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16" style="color:var(--muted)">
-                            <rect x="3" y="11" width="18" height="11" rx="2"></rect>
-                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                        </svg>
-                        <input type="password" id="api-key-input" placeholder="DeepSeek API Key..." autocomplete="off">
-                    </div>
-                    <button id="start-btn" class="btn btn-primary">Start</button>
-                    <div class="meta">
-                        <span>Mode: <span id="mode-label" style="color:var(--blue-600); font-weight:900;">Practice</span></span>
-                        <span id="exam-progress" class="hidden"></span>
-                    </div>
+                <div>
+                    <div class="nav-title">IELTS Speaking AI</div>
+                    <div class="nav-subtitle">AI-Powered Practice Coach</div>
                 </div>
-            </header>
+            </a>
 
-            <div class="layout">
-                <div style="display:flex; flex-direction:column; gap:16px;">
-                    <section class="card" aria-label="Question">
-                        <div class="card-hd">
-                            <h2>Question</h2>
-                            <div class="actions-row">
-                                <span id="part-label" class="chip">PART 1</span>
-                                <button type="button" class="btn btn-icon btn-ghost" onclick="generateNewQuestion()" title="New question" aria-label="New question">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
-                                        <path d="M21 12a9 9 0 1 1-3-6.7"></path>
-                                        <path d="M21 3v7h-7"></path>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="card-bd">
-                            <div class="question-meta">
-                                <div class="chip" style="padding:8px 12px;">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
-                                        <path d="M12 20h9"></path>
-                                        <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"></path>
-                                    </svg>
-                                    <span id="part-progress">Loading...</span>
-                                </div>
-                            </div>
-                            <h2 id="current-question" class="question">Loading IELTS question...</h2>
+            <div class="nav-links">
+                <button class="nav-link active" onclick="showPanel('home')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                    </svg>
+                    <span>Home</span>
+                </button>
+                <button class="nav-link" onclick="showPanel('history')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    <span>History</span>
+                </button>
+                <button class="nav-link" onclick="showPanel('settings')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                    <span>Settings</span>
+                </button>
+            </div>
 
-                            <div class="divider"></div>
-
-                            <div id="prep-box" class="hidden prep">
-                                You have <strong><span id="prep-seconds">30</span>s</strong> to prepare. Recording will unlock automatically.
-                            </div>
-
-                            <div class="actions-row" style="margin-top:14px; justify-content:space-between;">
-                                <div class="actions-row">
-                                    <button id="record-btn" class="btn btn-primary speak">
-                                        <span id="mic-icon" aria-hidden="true">
-                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3Z"></path>
-                                                <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
-                                                <path d="M12 19v4"></path>
-                                                <path d="M8 23h8"></path>
-                                            </svg>
-                                        </span>
-                                        <span id="stop-icon" class="hidden" aria-hidden="true">
-                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <rect x="7" y="7" width="10" height="10" rx="2"></rect>
-                                            </svg>
-                                        </span>
-                                        <span>Speak</span>
-                                    </button>
-                                    <div class="subtle" id="status-text">Tap to start answering</div>
-                                </div>
-                                <div class="slider" aria-label="Controls">
-                                    <button id="mode-practice" class="btn btn-primary">Practice</button>
-                                    <button id="mode-exam" class="btn btn-ghost">Exam</button>
-                                    <span class="subtle" style="font-weight:900;">Part 2 Prep</span>
-                                    <input id="prep-slider" type="range" min="0" max="180" step="5" value="30">
-                                    <span id="prep-value" class="chip" style="padding:6px 10px; letter-spacing:0;">30s</span>
-                                </div>
-                            </div>
-
-                            <div style="margin-top:14px;">
-                                <div id="part-section" class="parts">
-                                    <div onclick="setPart('part1')" id="btn-part1" class="part-card active">
-                                        <strong>Part 1</strong>
-                                        <span>Personal questions</span>
-                                    </div>
-                                    <div onclick="setPart('part2')" id="btn-part2" class="part-card">
-                                        <strong>Part 2</strong>
-                                        <span>Cue card talk</span>
-                                    </div>
-                                    <div onclick="setPart('part3')" id="btn-part3" class="part-card">
-                                        <strong>Part 3</strong>
-                                        <span>Deep discussion</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-
-                    <section class="card" aria-label="Transcript">
-                        <div class="card-hd">
-                            <h2>Transcript</h2>
-                            <span class="subtle">Speech-to-text</span>
-                        </div>
-                        <div class="card-bd">
-                            <div id="transcript-container" class="hidden">
-                                <div id="transcript-text" class="transcript"></div>
-                            </div>
-                            <div id="transcript-empty" class="subtle">Your transcript will appear here after you start speaking.</div>
-                        </div>
-                    </section>
+            <div class="nav-actions">
+                <div class="api-input-wrapper">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                    <input type="password" id="api-key-input" placeholder="DeepSeek API Key..." autocomplete="off">
                 </div>
-
-                <div style="display:flex; flex-direction:column; gap:16px;">
-                    <div id="loading-analysis" class="hidden card">
-                        <div class="card-bd" style="display:flex; align-items:center; gap:12px;">
-                            <div class="spinner" aria-hidden="true"></div>
-                            <div>
-                                <div style="font-weight:900; color:var(--blue-600);">Grading your response…</div>
-                                <div class="subtle">Quick feedback first, detailed feedback next.</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <section id="results-area" class="hidden fade-in card" aria-label="Scores and feedback">
-                        <div class="card-hd">
-                            <h2>Scores</h2>
-                            <span class="subtle">IELTS-style</span>
-                        </div>
-                        <div class="card-bd" style="display:flex; flex-direction:column; gap:14px;">
-                            <div id="quick-feedback-card" class="hidden" style="border:1px solid var(--border); border-radius:14px; padding:12px 14px; background:#fff;">
-                                <div class="section-title" style="margin-bottom:6px;">Quick feedback</div>
-                                <div id="quick-feedback-text" class="text-block"></div>
-                                <div id="quick-feedback-status" class="subtle" style="margin-top:8px;"></div>
-                            </div>
-
-                            <div class="score-grid" aria-label="Main scores">
-                                <div class="score">
-                                    <label>Overall</label>
-                                    <strong id="res-overall">0.0</strong>
-                                    <div class="bar"><div id="bar-overall"></div></div>
-                                </div>
-                                <div class="score">
-                                    <label>Grammar</label>
-                                    <strong id="res-grammar">0.0</strong>
-                                    <div class="bar"><div id="bar-grammar"></div></div>
-                                </div>
-                                <div class="score">
-                                    <label>Vocabulary</label>
-                                    <strong id="res-vocab">0.0</strong>
-                                    <div class="bar"><div id="bar-vocab"></div></div>
-                                </div>
-                                <div class="score">
-                                    <label>Fluency</label>
-                                    <strong id="res-fluency">0.0</strong>
-                                    <div class="bar"><div id="bar-fluency"></div></div>
-                                </div>
-                            </div>
-
-                            <div class="divider"></div>
-
-                            <div>
-                                <div class="section-title">Examiner feedback (EN)</div>
-                                <div id="feedback-en" class="text-block"></div>
-                                <div style="height:10px"></div>
-                                <div class="section-title">考官反馈 (中文)</div>
-                                <div id="feedback-zh" class="text-block"></div>
-                            </div>
-
-                            <div class="divider"></div>
-
-                            <div>
-                                <div class="section-title">How to improve (EN)</div>
-                                <div id="suggestions-en" class="text-block"></div>
-                                <div style="height:10px"></div>
-                                <div class="section-title">提升建议 (中文)</div>
-                                <div id="suggestions-zh" class="text-block"></div>
-                            </div>
-                        </div>
-                    </section>
-
-                    <section id="pronunciation-details" class="hidden card" aria-label="Pronunciation analysis">
-                        <div class="card-hd">
-                            <h2>Pronunciation</h2>
-                            <span class="chip" style="letter-spacing:0;">Beta</span>
-                        </div>
-                        <div class="card-bd" style="display:flex; flex-direction:column; gap:12px;">
-                            <div class="score-grid">
-                                <div class="score">
-                                    <label>Accuracy</label>
-                                    <strong id="res-accuracy">0</strong>
-                                    <div class="bar"><div id="bar-accuracy"></div></div>
-                                </div>
-                                <div class="score">
-                                    <label>Fluency</label>
-                                    <strong id="res-fluency-p">0</strong>
-                                    <div class="bar"><div id="bar-fluency-p"></div></div>
-                                </div>
-                                <div class="score">
-                                    <label>Completeness</label>
-                                    <strong id="res-completeness">0</strong>
-                                    <div class="bar"><div id="bar-completeness"></div></div>
-                                </div>
-                                <div class="score">
-                                    <label>Score</label>
-                                    <strong id="res-pron-score">0</strong>
-                                    <div class="bar"><div id="bar-pron"></div></div>
-                                </div>
-                            </div>
-                            <div class="transcript" style="font-size:13px;" id="pron-feedback-text"></div>
-                            <div class="subtle">AI-simulated pronunciation score. A professional SOE API can be connected later.</div>
-                        </div>
-                    </section>
-                </div>
+                <button id="start-btn" class="btn btn-primary">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                    </svg>
+                    Start
+                </button>
             </div>
         </div>
-    </div>
+    </nav>
 
+    <!-- ============================================
+         MAIN CONTENT
+         ============================================ -->
+    <main class="main-container">
+        <div class="main-layout">
+            <!-- ========================================
+                 PRIMARY CONTENT (Left/Main Area)
+                 评分展示面板 + 语音录入
+                 ======================================== -->
+            <div class="content-primary">
+                <!-- Mode & Progress Bar -->
+                <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <span style="font-size: 14px; color: var(--muted);">Mode:</span>
+                        <span id="mode-label" style="font-size: 14px; font-weight: 700; color: var(--primary);">Practice</span>
+                        <span id="exam-progress" class="chip hidden"></span>
+                    </div>
+                    <div id="part-label" class="chip">PART 1</div>
+                </div>
+
+                <!-- ========================================
+                     QUESTION CARD - 问题显示区域
+                     ======================================== -->
+                <section class="card question-card" aria-label="Question">
+                    <div class="card-header">
+                        <div class="card-header-left">
+                            <div class="card-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="card-title">Question</div>
+                                <div class="card-subtitle" id="part-progress">Loading...</div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-icon btn-ghost" onclick="generateNewQuestion()" title="New question" aria-label="New question">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 12a9 9 0 1 1-3-6.7"></path>
+                                <path d="M21 3v7h-7"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <h2 id="current-question" class="question-text">Loading IELTS question...</h2>
+
+                        <div id="prep-box" class="hidden prep-box">
+                            You have <strong><span id="prep-seconds">30</span>s</strong> to prepare. Recording will unlock automatically.
+                        </div>
+
+                        <!-- Part Selector - 选择 Part 1/2/3 -->
+                        <div id="part-section" class="parts-grid">
+                            <div onclick="setPart('part1')" id="btn-part1" class="part-card active">
+                                <strong>Part 1</strong>
+                                <span>Personal questions</span>
+                            </div>
+                            <div onclick="setPart('part2')" id="btn-part2" class="part-card">
+                                <strong>Part 2</strong>
+                                <span>Cue card talk</span>
+                            </div>
+                            <div onclick="setPart('part3')" id="btn-part3" class="part-card">
+                                <strong>Part 3</strong>
+                                <span>Deep discussion</span>
+                            </div>
+                        </div>
+
+                        <!-- Controls Row - 录音控制 -->
+                        <div class="controls-row">
+                            <div class="controls-left">
+                                <button id="record-btn" class="btn btn-primary btn-speak">
+                                    <span id="mic-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                                            <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                                            <line x1="12" y1="19" x2="12" y2="23"></line>
+                                            <line x1="8" y1="23" x2="16" y2="23"></line>
+                                        </svg>
+                                    </span>
+                                    <span id="stop-icon" class="hidden">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <rect x="6" y="6" width="12" height="12" rx="2"></rect>
+                                        </svg>
+                                    </span>
+                                    Speak
+                                </button>
+                                <span id="status-text" class="status-text">Tap to start answering</span>
+                            </div>
+                            <div class="controls-right">
+                                <div class="mode-toggle">
+                                    <button id="mode-practice" class="btn active">Practice</button>
+                                    <button id="mode-exam" class="btn">Exam</button>
+                                </div>
+                                <div class="prep-control">
+                                    <span>Prep Time</span>
+                                    <input id="prep-slider" type="range" min="0" max="180" step="5" value="30">
+                                    <span id="prep-value" class="chip" style="padding: 4px 10px;">30s</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ========================================
+                     TRANSCRIPT CARD - 语音转文字区域
+                     ======================================== -->
+                <section class="card" aria-label="Transcript">
+                    <div class="card-header">
+                        <div class="card-header-left">
+                            <div class="card-icon" style="background: #fef3c7; color: #f59e0b;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="card-title">Transcript</div>
+                                <div class="card-subtitle">Speech-to-text</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div id="transcript-container" class="hidden">
+                            <div id="transcript-text" class="transcript-box"></div>
+                        </div>
+                        <div id="transcript-empty" class="transcript-box transcript-empty">Your transcript will appear here after you start speaking.</div>
+                    </div>
+                </section>
+
+                <!-- ========================================
+                     LOADING ANALYSIS - 加载状态
+                     ======================================== -->
+                <div id="loading-analysis" class="hidden card">
+                    <div class="loading-card">
+                        <div class="spinner"></div>
+                        <div>
+                            <div class="loading-text">Grading your response...</div>
+                            <div class="loading-subtext">Quick feedback first, detailed feedback next.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ========================================
+                     RESULTS CARD - 评分展示面板
+                     ======================================== -->
+                <section id="results-area" class="hidden fade-in card" aria-label="Scores and feedback">
+                    <div class="card-header">
+                        <div class="card-header-left">
+                            <div class="card-icon" style="background: #d1fae5; color: #10b981;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="card-title">IELTS Scores</div>
+                                <div class="card-subtitle">AI-powered evaluation</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <!-- Quick Feedback -->
+                        <div id="quick-feedback-card" class="hidden quick-feedback-box">
+                            <div class="section-title">Quick Feedback</div>
+                            <div id="quick-feedback-text" class="text-block"></div>
+                            <div id="quick-feedback-status" class="quick-feedback-status"></div>
+                        </div>
+
+                        <!-- Score Grid - 分数卡片 -->
+                        <div class="scores-grid" aria-label="Main scores">
+                            <div class="score-card">
+                                <div class="score-label">Overall</div>
+                                <div class="score-value" id="res-overall">0.0</div>
+                                <div class="score-bar"><div class="score-bar-fill" id="bar-overall"></div></div>
+                            </div>
+                            <div class="score-card">
+                                <div class="score-label">Grammar</div>
+                                <div class="score-value" id="res-grammar">0.0</div>
+                                <div class="score-bar"><div class="score-bar-fill" id="bar-grammar"></div></div>
+                            </div>
+                            <div class="score-card">
+                                <div class="score-label">Vocabulary</div>
+                                <div class="score-value" id="res-vocab">0.0</div>
+                                <div class="score-bar"><div class="score-bar-fill" id="bar-vocab"></div></div>
+                            </div>
+                            <div class="score-card">
+                                <div class="score-label">Fluency</div>
+                                <div class="score-value" id="res-fluency">0.0</div>
+                                <div class="score-bar"><div class="score-bar-fill" id="bar-fluency"></div></div>
+                            </div>
+                        </div>
+
+                        <!-- Examiner Feedback Section -->
+                        <div class="feedback-section">
+                            <div class="section-title">Examiner Feedback (EN)</div>
+                            <div id="feedback-en" class="text-block">No feedback.</div>
+                            <div style="height: 16px;"></div>
+                            <div class="section-title">考官反馈 (中文)</div>
+                            <div id="feedback-zh" class="text-block"></div>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <!-- Suggestions Section -->
+                        <div>
+                            <div class="section-title">How to Improve (EN)</div>
+                            <div id="suggestions-en" class="text-block">No suggestions.</div>
+                            <div style="height: 16px;"></div>
+                            <div class="section-title">提升建议 (中文)</div>
+                            <div id="suggestions-zh" class="text-block"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ========================================
+                     PRONUNCIATION CARD - 发音分析
+                     ======================================== -->
+                <section id="pronunciation-details" class="hidden card pronunciation-card" aria-label="Pronunciation analysis">
+                    <div class="card-header">
+                        <div class="card-header-left">
+                            <div class="card-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="card-title">Pronunciation</div>
+                                <div class="card-subtitle">Voice analysis</div>
+                            </div>
+                        </div>
+                        <span class="chip chip-warning">Beta</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="scores-grid">
+                            <div class="score-card">
+                                <div class="score-label">Accuracy</div>
+                                <div class="score-value" id="res-accuracy">0</div>
+                                <div class="score-bar"><div class="score-bar-fill" id="bar-accuracy"></div></div>
+                            </div>
+                            <div class="score-card">
+                                <div class="score-label">Fluency</div>
+                                <div class="score-value" id="res-fluency-p">0</div>
+                                <div class="score-bar"><div class="score-bar-fill" id="bar-fluency-p"></div></div>
+                            </div>
+                            <div class="score-card">
+                                <div class="score-label">Completeness</div>
+                                <div class="score-value" id="res-completeness">0</div>
+                                <div class="score-bar"><div class="score-bar-fill" id="bar-completeness"></div></div>
+                            </div>
+                            <div class="score-card">
+                                <div class="score-label">Score</div>
+                                <div class="score-value" id="res-pron-score">0</div>
+                                <div class="score-bar"><div class="score-bar-fill" id="bar-pron"></div></div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 16px;">
+                            <div id="pron-feedback-text" class="pron-feedback-box"></div>
+                            <p class="pron-note">AI-simulated pronunciation score. A professional SOE API can be connected later.</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- ========================================
+                 SECONDARY CONTENT (Right Side)
+                 AI 反馈面板 + 快捷功能
+                 ======================================== -->
+            <div class="content-secondary">
+                <!-- ========================================
+                     AI FEEDBACK PANEL - AI 实时反馈
+                     ======================================== -->
+                <section class="card ai-panel" aria-label="AI Feedback">
+                    <div class="card-header">
+                        <div class="card-header-left">
+                            <div class="card-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z"></path>
+                                    <circle cx="7.5" cy="14.5" r="1.5"></circle>
+                                    <circle cx="16.5" cy="14.5" r="1.5"></circle>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="card-title">AI Coach</div>
+                                <div class="card-subtitle">Real-time guidance</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="ai-status">
+                            <span class="ai-status-dot"></span>
+                            <span>AI Coach is ready to help you practice</span>
+                        </div>
+                        
+                        <div style="margin-top: 20px;">
+                            <div class="section-title">Tips for Better Scores</div>
+                            <ul style="font-size: 13px; color: var(--text-secondary); line-height: 1.8; padding-left: 20px;">
+                                <li>Speak clearly and at a natural pace</li>
+                                <li>Use varied vocabulary and grammar structures</li>
+                                <li>Support your answers with examples</li>
+                                <li>Stay on topic and organize your thoughts</li>
+                            </ul>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <div class="section-title">Current Session</div>
+                        <div style="display: flex; flex-direction: column; gap: 8px; font-size: 13px;">
+                            <div style="display: flex; justify-content: space-between;">
+                                <span style="color: var(--muted);">Questions answered</span>
+                                <span style="font-weight: 600;">0</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <span style="color: var(--muted);">Average score</span>
+                                <span style="font-weight: 600;">--</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <span style="color: var(--muted);">Session time</span>
+                                <span style="font-weight: 600;">0 min</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ========================================
+                     QUICK ACTIONS - 快捷操作
+                     ======================================== -->
+                <section class="card" aria-label="Quick Actions">
+                    <div class="card-header">
+                        <div class="card-header-left">
+                            <div class="card-icon" style="background: #fef3c7; color: #f59e0b;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="card-title">Quick Actions</div>
+                                <div class="card-subtitle">Shortcuts</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body" style="display: flex; flex-direction: column; gap: 8px;">
+                        <button class="btn" style="width: 100%; justify-content: flex-start;" onclick="generateNewQuestion()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+                                <path d="M21 12a9 9 0 1 1-3-6.7"></path>
+                                <path d="M21 3v7h-7"></path>
+                            </svg>
+                            New Question
+                        </button>
+                        <button class="btn" style="width: 100%; justify-content: flex-start;" onclick="showPanel('history')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            View History
+                        </button>
+                        <button class="btn" style="width: 100%; justify-content: flex-start;" onclick="showPanel('settings')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+                                <circle cx="12" cy="12" r="3"></circle>
+                                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                            </svg>
+                            Settings
+                        </button>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <!-- ============================================
+         MODAL OVERLAY - 遮罩层
+         ============================================ -->
+    <div id="modal-overlay" class="modal-overlay" onclick="closeAllPanels()"></div>
+
+    <!-- ============================================
+         HISTORY PANEL - 历史记录面板（占位）
+         功能：显示每次练习的分数和时间
+         ============================================ -->
+    <aside id="history-panel" class="sidebar-panel" aria-label="History">
+        <div class="sidebar-header">
+            <h2 class="sidebar-title">Practice History</h2>
+            <button class="sidebar-close" onclick="closeAllPanels()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+        <div class="sidebar-body">
+            <!-- 占位：历史记录列表 -->
+            <div class="history-list">
+                <!-- 示例历史记录项 - 后续可动态生成 -->
+                <div class="history-item">
+                    <div class="history-item-left">
+                        <span class="history-date">Mar 23, 2026 - 10:30 AM</span>
+                        <span class="history-part">Part 1 - Personal Questions</span>
+                    </div>
+                    <span class="history-score">7.0</span>
+                </div>
+                <div class="history-item">
+                    <div class="history-item-left">
+                        <span class="history-date">Mar 22, 2026 - 3:15 PM</span>
+                        <span class="history-part">Part 2 - Cue Card</span>
+                    </div>
+                    <span class="history-score">6.5</span>
+                </div>
+                <div class="history-item">
+                    <div class="history-item-left">
+                        <span class="history-date">Mar 21, 2026 - 9:00 AM</span>
+                        <span class="history-part">Part 3 - Discussion</span>
+                    </div>
+                    <span class="history-score">7.5</span>
+                </div>
+            </div>
+            
+            <div class="divider" style="margin: 24px 0;"></div>
+            
+            <div style="text-align: center; color: var(--muted); font-size: 13px;">
+                <p>History feature coming soon.</p>
+                <p style="margin-top: 8px;">Your practice records will be saved here.</p>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ============================================
+         SETTINGS PANEL - 设置面板（占位）
+         功能：语言选项、提示音开关等
+         ============================================ -->
+    <aside id="settings-panel" class="sidebar-panel" aria-label="Settings">
+        <div class="sidebar-header">
+            <h2 class="sidebar-title">Settings</h2>
+            <button class="sidebar-close" onclick="closeAllPanels()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+        <div class="sidebar-body">
+            <!-- 占位：语言设置 -->
+            <div class="settings-section">
+                <div class="section-title">Language & Region</div>
+                <div class="settings-row">
+                    <div class="settings-label">
+                        <span class="settings-label-title">Interface Language</span>
+                        <span class="settings-label-desc">Choose your preferred language</span>
+                    </div>
+                    <select class="settings-select">
+                        <option value="en">English</option>
+                        <option value="zh">中文</option>
+                    </select>
+                </div>
+                <div class="settings-row">
+                    <div class="settings-label">
+                        <span class="settings-label-title">Feedback Language</span>
+                        <span class="settings-label-desc">Language for AI feedback</span>
+                    </div>
+                    <select class="settings-select">
+                        <option value="both">Both EN & CN</option>
+                        <option value="en">English Only</option>
+                        <option value="zh">Chinese Only</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- 占位：声音设置 -->
+            <div class="settings-section">
+                <div class="section-title">Sound & Notifications</div>
+                <div class="settings-row">
+                    <div class="settings-label">
+                        <span class="settings-label-title">Sound Effects</span>
+                        <span class="settings-label-desc">Play sounds for actions</span>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="settings-row">
+                    <div class="settings-label">
+                        <span class="settings-label-title">Timer Alerts</span>
+                        <span class="settings-label-desc">Beep when prep time ends</span>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- 占位：练习设置 -->
+            <div class="settings-section">
+                <div class="section-title">Practice Preferences</div>
+                <div class="settings-row">
+                    <div class="settings-label">
+                        <span class="settings-label-title">Auto-advance Questions</span>
+                        <span class="settings-label-desc">Move to next question automatically</span>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="settings-row">
+                    <div class="settings-label">
+                        <span class="settings-label-title">Show Pronunciation</span>
+                        <span class="settings-label-desc">Display pronunciation analysis</span>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+            
+            <div style="text-align: center; color: var(--muted); font-size: 13px;">
+                <p>Settings feature coming soon.</p>
+                <p style="margin-top: 8px;">Preferences will be saved locally.</p>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ============================================
+         JAVASCRIPT - 保留原有功能
+         ============================================ -->
     <script>
+        // ===== Panel Navigation Functions =====
+        function showPanel(panel) {
+            closeAllPanels();
+            
+            // Update nav links
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+            
+            if (panel === 'history') {
+                document.getElementById('history-panel').classList.add('active');
+                document.getElementById('modal-overlay').classList.add('active');
+                document.querySelectorAll('.nav-link')[1].classList.add('active');
+            } else if (panel === 'settings') {
+                document.getElementById('settings-panel').classList.add('active');
+                document.getElementById('modal-overlay').classList.add('active');
+                document.querySelectorAll('.nav-link')[2].classList.add('active');
+            } else {
+                document.querySelectorAll('.nav-link')[0].classList.add('active');
+            }
+        }
+
+        function closeAllPanels() {
+            document.getElementById('history-panel').classList.remove('active');
+            document.getElementById('settings-panel').classList.remove('active');
+            document.getElementById('modal-overlay').classList.remove('active');
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+            document.querySelectorAll('.nav-link')[0].classList.add('active');
+        }
+
+        // ===== Original Functionality (Preserved) =====
         let currentPart = 'part1';
         let currentMode = 'practice';
         let isRecording = false;
@@ -692,7 +1754,7 @@
             if (!q) return '';
             let s = String(q);
             s = s.replace(/[\r\n]+/g, ' ');
-            s = s.replace(/["'‘’“”]/g, '');
+            s = s.replace(/["'''""]/g, '');
             s = s.replace(/^\s*(\d+\.\s*|\d+\)\s*|Q\d+\s*[:\-]\s*)/i, '');
             s = s.replace(/\s+/g, ' ').trim();
             return s;
@@ -708,10 +1770,6 @@
         }
 
         function init() {
-            if (window.lucide && typeof window.lucide.createIcons === 'function') {
-                window.lucide.createIcons();
-            }
-            
             apiKeyInput.value = localStorage.getItem('deepseek_api_key') || '';
             const savedPrep = localStorage.getItem('part2_prep_seconds');
             if (savedPrep !== null && savedPrep !== undefined && savedPrep !== '') {
@@ -754,15 +1812,11 @@
         function updateModeUI(total = 0, index = 0) {
             modeLabel.textContent = currentMode === 'exam' ? 'Exam' : 'Practice';
             if (currentMode === 'practice') {
-                modePracticeBtn.classList.add('btn-primary');
-                modePracticeBtn.classList.remove('btn-ghost');
-                modeExamBtn.classList.add('btn-ghost');
-                modeExamBtn.classList.remove('btn-primary');
+                modePracticeBtn.classList.add('active');
+                modeExamBtn.classList.remove('active');
             } else {
-                modeExamBtn.classList.add('btn-primary');
-                modeExamBtn.classList.remove('btn-ghost');
-                modePracticeBtn.classList.add('btn-ghost');
-                modePracticeBtn.classList.remove('btn-primary');
+                modeExamBtn.classList.add('active');
+                modePracticeBtn.classList.remove('active');
             }
 
             if (currentMode === 'exam') {
@@ -1106,7 +2160,7 @@
                 setPct('res-completeness', 'bar-completeness', null);
                 setPct('res-pron-score', 'bar-pron', null);
             }
-            window.scrollTo({ top: resultsArea.offsetTop - 50, behavior: 'smooth' });
+            window.scrollTo({ top: resultsArea.offsetTop - 100, behavior: 'smooth' });
         }
 
         async function generateNewQuestion() {
@@ -1126,6 +2180,7 @@
             setMode('practice');
         }
 
+        // Initialize the app
         init();
     </script>
 </body>
